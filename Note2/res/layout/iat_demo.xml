@@ -3,7 +3,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical" >
-    
+
     <EditText
         android:id="@+id/iat_text"
         android:layout_width="fill_parent"
@@ -17,7 +17,12 @@
         android:id="@+id/iat_Recognize"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:text="点击说话" 
-        />
+        android:text="点击说话" />
+
+    <Button
+        android:id="@+id/btnPcm2Wav"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:text="pcm--->wav" />
 
 </LinearLayout>

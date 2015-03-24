@@ -1,5 +1,6 @@
 package com.example.note2;
 
+
 import android.app.Activity;
 import android.app.ListActivity;
 import android.content.Intent;

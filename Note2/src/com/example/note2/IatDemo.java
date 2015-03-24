@@ -12,10 +12,12 @@ import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.Window;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
 import com.example.note2.util.JsonParser;
+import com.example.note2.util.Pcm2Wav;
 import com.iflytek.cloud.ErrorCode;
 import com.iflytek.cloud.InitListener;
 import com.iflytek.cloud.RecognizerListener;
@@ -41,9 +43,15 @@ public class IatDemo extends Activity implements OnClickListener{
 	private SharedPreferences mSharedPreferences;
 	// 引擎类型
 	private String mEngineType = SpeechConstant.TYPE_CLOUD;
-	
-	File f;
+	//文件路径
+	File pcmPath;
+	File wavPath;
 	private String currentPath = null;
+	
+	//音频转换对象
+	private Button btrPcm2Wav;
+	
+	
 	
 	@SuppressLint("ShowToast")
 	public void onCreate(Bundle savedInstanceState)
@@ -74,6 +82,7 @@ public class IatDemo extends Activity implements OnClickListener{
 	 */
 	private void initLayout(){
 		findViewById(R.id.iat_Recognize).setOnClickListener(this);
+		findViewById(R.id.btnPcm2Wav).setOnClickListener(this);
 	}
 
 	int ret = 0;// 函数调用返回值
@@ -102,12 +111,29 @@ public class IatDemo extends Activity implements OnClickListener{
 				}
 			}
 			break;
+		case R.id.btnPcm2Wav:
+			pcm2wav();
 		
 		default:
 			break;
 		}
 	}
 
+
+	private void pcm2wav() {
+		// TODO Auto-generated method stub
+		   Pcm2Wav tool = new Pcm2Wav();
+	        try
+	        {
+	           //tool.convertAudioFiles(pcmFilePath, wavFilePath);
+	            tool.convertAudioFiles(currentPath.toString(), wavPath.toString());
+	        }
+	        catch (Exception e)
+	        {
+	            Log.e(TAG, "pcm failed to convert into wav File:" + e.getMessage());
+	        }
+		
+	}
 
 	/**
 	 * 初始化监听器。
@@ -231,15 +257,17 @@ public class IatDemo extends Activity implements OnClickListener{
 		
 		
 
-		f = new File(getMediaDir(), System.currentTimeMillis() + ".pcm");
+		pcmPath = new File(getMediaDir(), System.currentTimeMillis() + ".pcm");
+		wavPath = new File(getMediaDir(), System.currentTimeMillis() + ".wav");
+		
 
 		try {
-			f.createNewFile();
+			pcmPath.createNewFile();
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
 
-		currentPath = f.getAbsolutePath();
+		currentPath = pcmPath.getAbsolutePath();
 		mIat.setParameter(SpeechConstant.ASR_AUDIO_PATH, currentPath);
 	}
 	
