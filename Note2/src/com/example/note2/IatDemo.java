@@ -5,6 +5,9 @@ import java.io.IOException;
 
 import android.annotation.SuppressLint;
 import android.app.Activity;
+import android.app.AlertDialog;
+import android.content.DialogInterface;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.Environment;
@@ -48,10 +51,7 @@ public class IatDemo extends Activity implements OnClickListener{
 	File wavPath;
 	private String currentPath = null;
 	
-	//音频转换对象
-	private Button btrPcm2Wav;
-	
-	
+
 	
 	@SuppressLint("ShowToast")
 	public void onCreate(Bundle savedInstanceState)
@@ -82,7 +82,7 @@ public class IatDemo extends Activity implements OnClickListener{
 	 */
 	private void initLayout(){
 		findViewById(R.id.iat_Recognize).setOnClickListener(this);
-		findViewById(R.id.btnPcm2Wav).setOnClickListener(this);
+		//findViewById(R.id.btnPcm2Wav).setOnClickListener(this);
 	}
 
 	int ret = 0;// 函数调用返回值
@@ -111,8 +111,12 @@ public class IatDemo extends Activity implements OnClickListener{
 				}
 			}
 			break;
-		case R.id.btnPcm2Wav:
+		/*case R.id.btnPcm2Wav:
 			pcm2wav();
+			
+	
+			break;
+			*/
 		
 		default:
 			break;
@@ -302,4 +306,33 @@ public class IatDemo extends Activity implements OnClickListener{
 		FlowerCollector.onPause(this);
 		super.onPause();
 	}
+
+
+
+	public void onBackPressed() { 
+        new AlertDialog.Builder(this).setTitle("确认退出吗？") 
+            .setIcon(android.R.drawable.ic_dialog_info) 
+            .setPositiveButton("确定", new DialogInterface.OnClickListener() { 
+         
+                @Override 
+                public void onClick(DialogInterface dialog, int which) { 
+                // 点击“确认”后的操作 
+                   Toast.makeText(IatDemo.this, ".", Toast.LENGTH_LONG).show();
+                   pcm2wav();
+                   //把地址推送到ActivityForResult
+                   Intent intent = new Intent();
+                   intent.putExtra("wavPath", wavPath.toString());
+                   setResult(3, intent);
+                   finish();
+         
+                } 
+            }) 
+            .setNegativeButton("返回", new DialogInterface.OnClickListener() { 
+         
+                @Override 
+                public void onClick(DialogInterface dialog, int which) { 
+                // 点击“返回”后的操作,这里不设置没有任何操作 
+                } 
+            }).show(); 
+           }  
 }

@@ -7,7 +7,6 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-
 import android.app.ListActivity;
 import android.content.ContentValues;
 import android.content.Context;
@@ -20,28 +19,37 @@ import android.os.Environment;
 import android.provider.MediaStore;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.note2.arcmenu.ArcMenu;
+import com.example.note2.arcmenu.ArcMenu.OnMenuItemClickListener;
+import com.example.note2.arcmenu.ArcMenu.Position;
 import com.example.note2.db.NotesDB;
 
 public class AtyEditNote extends ListActivity {
+	
+	private ArcMenu arcMenu;
 
+	
+
+/*
 	private OnClickListener btnClickHandler = new OnClickListener() {
 
 		File f;
 		Intent i;
+		
 
 		@Override
 		public void onClick(View v) {
 			switch (v.getId()) {
-			case R.id.btnAddPhoto:
+			case R.id.sat_camera:
 
 				i = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
 				f = new File(getMediaDir(), System.currentTimeMillis() + ".jpg");
@@ -53,10 +61,10 @@ public class AtyEditNote extends ListActivity {
 					}
 				}
 				currentPath = f.getAbsolutePath();
-				i.putExtra(MediaStore.EXTRA_OUTPUT, Uri.fromFile(f));// 媒体输出路径
+				i.putExtra(MediaStore.EXTRA_OUTPUT, Uri.fromFile(f));// 媒体输出路径,存储位置
 				startActivityForResult(i, REQUEST_CODE_GET_PHOTO);
 				break;
-			case R.id.btnAddVideo:
+			case R.id.sat_Video:
 
 				i = new Intent(MediaStore.ACTION_VIDEO_CAPTURE);
 				f = new File(getMediaDir(), System.currentTimeMillis() + ".mp4");
@@ -72,56 +80,27 @@ public class AtyEditNote extends ListActivity {
 
 				startActivityForResult(i, REQUEST_CODE_GET_VIDEO);
 				break;
-			case R.id.btnSave:
+			case R.id.sat_Save:
 				saveMedia(saveNote());
 				setResult(RESULT_OK);
 				finish();
 				break;
-			case R.id.btnCancel:
+			case R.id.sat_Cancel:
 				setResult(RESULT_CANCELED);
 				finish();
 				break;
-			case R.id.btnAddRecord:
+			case R.id.sat_Record:
 				
-				
-				/*i = new Intent(AtyEditNote.this,AtyVideoViewer.class);
-				
-				startActivity(i);*/
-				
-				
-			/*	 * mediaRecorder = new MediaRecorder();
-				 * mediaRecorder.setAudioSource(MediaRecorder.AudioSource.MIC);
-				 * mediaRecorder
-				 * .setOutputFormat(MediaRecorder.OutputFormat.DEFAULT);
-				 * mediaRecorder
-				 * .setAudioEncoder(MediaRecorder.AudioEncoder.DEFAULT);
-				 */
-
-				i = new Intent(MediaStore.Audio.Media.RECORD_SOUND_ACTION);
-				
-
-				f = new File(getMediaDir(), System.currentTimeMillis() + ".mp3");
-
-				try {
-					f.createNewFile();
-				} catch (IOException e) {
-					e.printStackTrace();
-				}
-
-				currentPath = f.getAbsolutePath();
-			    
-
-				i.putExtra(MediaStore.EXTRA_OUTPUT, Uri.fromFile(f));
-				
+				Intent i = new Intent(AtyEditNote.this,IatDemo.class);
 				
 				startActivityForResult(i, REQUEST_CODE_GET_SOUND);
-				//i.putExtra(MediaStore, )
 
 			default:
 				break;
 			}
 		}
-	};
+	};*/
+
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -154,13 +133,87 @@ public class AtyEditNote extends ListActivity {
 			}
 			adapter.notifyDataSetChanged();
 		}
-
-		findViewById(R.id.btnSave).setOnClickListener(btnClickHandler);
-		findViewById(R.id.btnCancel).setOnClickListener(btnClickHandler);
-		findViewById(R.id.btnAddPhoto).setOnClickListener(btnClickHandler);
-		findViewById(R.id.btnAddVideo).setOnClickListener(btnClickHandler);
-		findViewById(R.id.btnAddRecord).setOnClickListener(btnClickHandler);
+		initView();
+		initEvent();
+	
+	
 	}
+
+
+	private void initEvent() {
+	arcMenu.setOnMenuItemClickListener(new OnMenuItemClickListener() {
+		
+
+		File f;
+		Intent i;
+		
+		
+		@Override
+		public void onClick(View view, int pos) {
+			switch (pos) {
+			case 1:
+				i = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+				f = new File(getMediaDir(), System.currentTimeMillis() + ".jpg");
+				if (!f.exists()) {
+					try {
+						f.createNewFile();
+					} catch (IOException e) {
+						e.printStackTrace();
+					}
+				}
+				currentPath = f.getAbsolutePath();
+				i.putExtra(MediaStore.EXTRA_OUTPUT, Uri.fromFile(f));// 媒体输出路径,存储位置
+				startActivityForResult(i, REQUEST_CODE_GET_PHOTO);
+				break;
+			case 5:
+
+				i = new Intent(MediaStore.ACTION_VIDEO_CAPTURE);
+				f = new File(getMediaDir(), System.currentTimeMillis() + ".mp4");
+				if (!f.exists()) {
+					try {
+						f.createNewFile();
+					} catch (IOException e) {
+						e.printStackTrace();
+					}
+				}
+				currentPath = f.getAbsolutePath();
+				i.putExtra(MediaStore.EXTRA_OUTPUT, Uri.fromFile(f));
+
+				startActivityForResult(i, REQUEST_CODE_GET_VIDEO);
+				break;
+			case 3:
+				saveMedia(saveNote());
+				setResult(RESULT_OK);
+				finish();
+				break;
+			case 4:
+				setResult(RESULT_CANCELED);
+				finish();
+				break;
+			case 2:
+				
+				Intent i = new Intent(AtyEditNote.this,IatDemo.class);
+				
+				startActivityForResult(i, REQUEST_CODE_GET_SOUND);
+
+			default:
+				break;
+			
+		}
+	}	
+			
+		
+	});
+	
+}
+
+
+	private void initView() {
+
+		arcMenu = (ArcMenu) findViewById(R.id.id_menu);
+
+	}
+	
 
 	@Override
 	protected void onListItemClick(ListView l, View v, int position, long id) {
@@ -196,13 +249,12 @@ public class AtyEditNote extends ListActivity {
 	@Override
 	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
 
-		System.out.println(data);
+
 
 		switch (requestCode) {
 		case REQUEST_CODE_GET_PHOTO:
 		case REQUEST_CODE_GET_VIDEO:
-		//case REQUEST_CODE_GET_SOUND:
-
+			
 			if (resultCode == RESULT_OK) {
 				adapter.add(new MediaListCellData(currentPath));
 				adapter.notifyDataSetChanged();
@@ -212,15 +264,24 @@ public class AtyEditNote extends ListActivity {
 			break;
 		case REQUEST_CODE_GET_SOUND:
 
-			if (resultCode == RESULT_OK) {
-				audioPath = data.getData();  //获取到Uri
+			if (resultCode == RESULT_OK||resultCode==3) {
+				/*audioPath = data.getData();  //获取到Uri
 				Toast.makeText(this, audioPath.toString(), Toast.LENGTH_LONG).show(); 
 				recordPath = audioPath.toString();//转换
+				System.out.println(recordPath);
 				
 				adapter.add(new MediaListCellData(recordPath));
 				adapter.notifyDataSetChanged();
-		        
-		        
+		        */
+				
+				
+				/*
+				 * 获取wav的Path	
+				 */
+				String wavPath = data.getExtras().getString("wavPath");
+				System.out.println("____________________________"+wavPath);
+				adapter.add(new MediaListCellData(wavPath));
+				adapter.notifyDataSetChanged();
 			}
 			break;
 		default:
@@ -290,6 +351,7 @@ public class AtyEditNote extends ListActivity {
 	
 	private Uri audioPath;
 	private String recordPath;
+	private String wavPath;
 	
 	public static final int REQUEST_CODE_GET_PHOTO = 1;
 	public static final int REQUEST_CODE_GET_VIDEO = 2;
@@ -359,7 +421,7 @@ public class AtyEditNote extends ListActivity {
 			if (path.endsWith(".mp4")) {
 				iconId = R.drawable.icon_video;
 				type = MediaType.VIDEO;
-			} else if (path.endsWith(".mp3")) {
+			} else if (path.endsWith(".wav")) {
 				iconId = R.drawable.icon_sound;
 				type = MediaType.SOUND;
 			}
@@ -382,4 +444,6 @@ public class AtyEditNote extends ListActivity {
 		static final int VIDEO = 2;
 		static final int SOUND = 3;
 	}
+
+	
 }

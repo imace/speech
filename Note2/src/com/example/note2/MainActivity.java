@@ -26,14 +26,7 @@ public class MainActivity extends ListActivity {
 			startActivityForResult(new Intent(MainActivity.this, AtyEditNote.class), REQUEST_CODE_ADD_NOTE);
 		}
 	};
-	private OnClickListener btnAddRecognize_clickHandler = new OnClickListener() {
-		
-		@Override
-		public void onClick(View v) {
-			Intent intent = new Intent(MainActivity.this,IatDemo.class);
-			startActivity(intent);
-		}
-	};
+	
 	
 	
 	
@@ -51,7 +44,7 @@ public class MainActivity extends ListActivity {
 		refreshNotesListView();
 		
 		findViewById(R.id.btnAddNote).setOnClickListener(btnAddNote_clickHandler);
-		findViewById(R.id.btnAddRecognize).setOnClickListener(btnAddRecognize_clickHandler );
+		
 	}
 	
 	

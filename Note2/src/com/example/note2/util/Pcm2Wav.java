@@ -3,6 +3,10 @@ package com.example.note2.util;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 
+import com.example.note2.IatDemo;
+
+import android.widget.Toast;
+
 public class Pcm2Wav
 {
     
@@ -52,5 +56,6 @@ public class Pcm2Wav
         fos.close();
         
         System.out.println("Convert OK!");
+        
     }
 }
