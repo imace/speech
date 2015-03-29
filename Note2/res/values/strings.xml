@@ -1,8 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <string name="app_name">Note2</string>
+    <string name="app_name">语音日记</string>
     <string name="hello_world">Hello world!</string>
-    <string name="action_settings">Settings</string>
+    <string name="action_settings">设置</string>
+     <string name="action_search">查找</string>
+      <string name="action_add">添加</string>
+       <string name="action_update">刷新</string>
+       
 
 </resources>
