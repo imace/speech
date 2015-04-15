@@ -1,7 +1,11 @@
 package com.example.note2;
 
 import java.util.ArrayList;
+import java.util.List;
 
+import javax.security.auth.PrivateCredentialPermission;
+
+import android.R.integer;
 import android.app.Activity;
 import android.app.Fragment;
 import android.app.FragmentManager;
@@ -24,17 +28,14 @@ import android.widget.ListView;
 import android.widget.SimpleCursorAdapter;
 
 import com.example.note2.db.NotesDB;
-import com.example.note2.ContentFragment;
-import com.example.note2.R;
 
 public class MainActivity extends ListActivity {
 
 	private DrawerLayout mDrawerLayout;
 	private ListView mDrawList;
-	private ArrayList<String> menulist;
-	private ArrayAdapter<String> menuAdapter;
 	private ActionBarDrawerToggle mDrawerToggle;
-	private String mTitle;
+	private String title;
+	private List<DrawerListItem> ListItem = new ArrayList<DrawerListItem>();
 
 	private OnClickListener btnAddNote_clickHandler = new OnClickListener() {
 
@@ -55,7 +56,8 @@ public class MainActivity extends ListActivity {
 
 			Fragment contentFragment = new ContentFragment();
 			Bundle args = new Bundle();
-			args.putString("text", menulist.get(position));
+			//args.putString("text", ListItem.get(position));
+			args.putString("text", "aaaaaaaaaaaaaa");
 			contentFragment.setArguments(args);
 
 			FragmentManager fm = getFragmentManager();
@@ -90,11 +92,34 @@ public class MainActivity extends ListActivity {
 		 * 
 		 */
 		
-		mTitle = (String) getTitle();
+		title = (String) getTitle();
 		mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
 		mDrawList = (ListView) findViewById(R.id.left_drawer);
+		
+		String[] mTitle = getResources().getStringArray(R.array.item_title);
+		int[] itemIconRes={
+				R.drawable.ic_drawer_home_normal,
+				R.drawable.ic_drawer_explore_normal,
+				R.drawable.ic_drawer_follow_normal,
+				R.drawable.ic_drawer_collect_normal,
+				R.drawable.ic_drawer_draft_normal,
+				R.drawable.ic_drawer_search_normal,
+				R.drawable.ic_drawer_question_normal,
+				R.drawable.ic_drawer_setting_normal
+				
+		};
+		for (int i=0;i<itemIconRes.length;i++){
+			DrawerListItem item = new DrawerListItem(getResources().getDrawable(itemIconRes[i]), mTitle[i]);
+			ListItem.add(item);
+			
+		}
+		
+		DrawerListAdapter adapter = new DrawerListAdapter(this,ListItem);
+		mDrawList.setAdapter(adapter);
+		
+		
 
-		menulist = new ArrayList<String>();
+		/*menulist = new ArrayList<String>();
 		menulist.add("Login");
 		menulist.add("Upload");
 		menulist.add("Dowload");
@@ -103,7 +128,7 @@ public class MainActivity extends ListActivity {
 
 		menuAdapter = new ArrayAdapter<>(this,
 				android.R.layout.simple_list_item_1, menulist);
-		mDrawList.setAdapter(menuAdapter);
+		mDrawList.setAdapter(menuAdapter);*/
 		mDrawList.setOnItemClickListener(btnMenuList_clickHandler);
 /*
  * 监听侧边栏是否打开，并设置标题,图标
@@ -123,7 +148,7 @@ public class MainActivity extends ListActivity {
 			@Override
 			public void onDrawerClosed(View drawerView) {
 				// TODO Auto-generated method stub
-				getActionBar().setTitle(mTitle);
+				getActionBar().setTitle("首页");
 				invalidateOptionsMenu();
 				super.onDrawerClosed(drawerView);
 				
@@ -133,48 +158,48 @@ public class MainActivity extends ListActivity {
 		//开启ActionBar上的APP ICON的功能
 		getActionBar().setDisplayHomeAsUpEnabled(true);
 		getActionBar().setHomeButtonEnabled(true);
+		getActionBar().setDisplayShowHomeEnabled(false);
 
 	}
+
 	/*
 	 * 根据侧边栏是否打开变换右上角的功能图标
 	 */
 	@Override
 	public boolean onPrepareOptionsMenu(Menu menu) {
 		// TODO Auto-generated method stub
-		boolean isDrawerOpen =mDrawerLayout.isDrawerOpen(mDrawList);
+		boolean isDrawerOpen = mDrawerLayout.isDrawerOpen(mDrawList);
 		menu.findItem(R.id.action_search).setVisible(!isDrawerOpen);
-		
+
 		return super.onPrepareOptionsMenu(menu);
 	}
-	
 
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
-	//将actionBar上的图标与drawer结合起来
-		if(mDrawerToggle.onOptionsItemSelected(item)){
+		// 将actionBar上的图标与drawer结合起来
+		if (mDrawerToggle.onOptionsItemSelected(item)) {
 			return true;
 		}
 		return super.onOptionsItemSelected(item);
 	}
-	
+
 	@Override
 	protected void onPostCreate(Bundle savedInstanceState) {
-		//需要将actionDrawerToggle与drawerLayout同步
-		//将actionBarDrawerToggle的drawer图标，设置为actionBar中的Home-Button
+		// 需要将actionDrawerToggle与drawerLayout同步
+		// 将actionBarDrawerToggle的drawer图标，设置为actionBar中的Home-Button
 		mDrawerToggle.syncState();
-		
+
 		super.onPostCreate(savedInstanceState);
 	}
-	//屏幕旋转时的处理
+
+	// 屏幕旋转时的处理
 	@Override
 	public void onConfigurationChanged(Configuration newConfig) {
-		
+
 		mDrawerToggle.onConfigurationChanged(newConfig);
 		super.onConfigurationChanged(newConfig);
 	}
 
-	
-	
 	@Override
 	protected void onListItemClick(ListView l, View v, int position, long id) {
 
