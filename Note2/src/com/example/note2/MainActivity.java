@@ -95,11 +95,11 @@ public class MainActivity extends ListActivity {
 		mDrawList = (ListView) findViewById(R.id.left_drawer);
 
 		menulist = new ArrayList<String>();
-		menulist.add("登陆");
-		menulist.add("上传");
-		menulist.add("下载");
-		menulist.add("共享");
-		menulist.add("反馈");
+		menulist.add("Login");
+		menulist.add("Upload");
+		menulist.add("Dowload");
+		menulist.add("Share");
+		menulist.add("Feedback");
 
 		menuAdapter = new ArrayAdapter<>(this,
 				android.R.layout.simple_list_item_1, menulist);
@@ -114,7 +114,7 @@ public class MainActivity extends ListActivity {
 			@Override
 			public void onDrawerOpened(View drawerView) {
 				// TODO Auto-generated method stub
-				getActionBar().setTitle("choose");
+				getActionBar().setTitle("智能备忘录");
 				invalidateOptionsMenu();  //call onPrepareOptionMenu(),并重写方法
 				
 				super.onDrawerOpened(drawerView);

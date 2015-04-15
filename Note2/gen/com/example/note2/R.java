@@ -1101,6 +1101,8 @@ containing a value of this type.
         public static final int abc_textfield_searchview_right_holo_dark=0x7f020055;
         public static final int abc_textfield_searchview_right_holo_light=0x7f020056;
         public static final int action_search=0x7f020057;
+        public static final int actionbar_background=0x7f020065;
+        public static final int activated_background_color=0x7f020066;
         public static final int composer_button=0x7f020058;
         public static final int composer_camera=0x7f020059;
         public static final int composer_icn_plus=0x7f02005a;
@@ -1311,24 +1313,16 @@ containing a value of this type.
         /**  Description of a share target (both in the list of such or the default share button) in a ShareActionProvider (share UI). [CHAR LIMIT=NONE] 
          */
         public static final int abc_shareactionprovider_share_with_application=0x7f0a000b;
-        public static final int action_logout=0x7f0a0012;
-        public static final int action_settings=0x7f0a000f;
+        public static final int action_logout=0x7f0a0013;
+        public static final int action_settings=0x7f0a0010;
         public static final int app_name=0x7f0a000d;
-        public static final int drawer_close=0x7f0a0011;
-        public static final int drawer_open=0x7f0a0010;
-        public static final int hello_world=0x7f0a000e;
+        public static final int drawer_close=0x7f0a0012;
+        public static final int drawer_open=0x7f0a0011;
+        public static final int hello_world=0x7f0a000f;
+        public static final int main_page=0x7f0a000e;
     }
     public static final class style {
         /** 
-        Base application theme, dependent on API level. This theme is replaced
-        by AppBaseTheme from res/values-vXX/styles.xml on newer devices.
-    
-
-            Theme customizations available in newer API levels can go in
-            res/values-vXX/styles.xml, while customizations related to
-            backward-compatibility can go here.
-        
-
         Base application theme for API 11+. This theme completely replaces
         AppBaseTheme from res/values/styles.xml on API 11+ devices.
     
@@ -1340,11 +1334,14 @@ containing a value of this type.
     
  API 14 theme customizations can go here. 
          */
-        public static final int AppBaseTheme=0x7f0b008b;
-        /**  Application theme. 
- All customizations that are NOT specific to a particular API-level can go here. 
+        public static final int AppBaseTheme=0x7f0b008e;
+        /**  the theme applied to the application or activity 
          */
-        public static final int AppTheme=0x7f0b008c;
+        public static final int CustomActionBarTheme=0x7f0b008b;
+        /**  ActionBar styles 
+         */
+        public static final int MyActionBar=0x7f0b008c;
+        public static final int MyTitleStyle=0x7f0b008d;
         /**  Mimic text appearance in select_dialog_item.xml 
          */
         public static final int TextAppearance_AppCompat_Base_CompactMenu_Dialog=0x7f0b0063;
