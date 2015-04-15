@@ -1,6 +1,5 @@
 package com.example.note2;
 
-
 import java.util.ArrayList;
 
 import android.app.Activity;
@@ -8,11 +7,14 @@ import android.app.Fragment;
 import android.app.FragmentManager;
 import android.app.ListActivity;
 import android.content.Intent;
+import android.content.res.Configuration;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
+import android.support.v4.app.ActionBarDrawerToggle;
 import android.support.v4.widget.DrawerLayout;
 import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.AdapterView;
@@ -26,20 +28,20 @@ import com.example.note2.ContentFragment;
 import com.example.note2.R;
 
 public class MainActivity extends ListActivity {
-	
+
 	private DrawerLayout mDrawerLayout;
 	private ListView mDrawList;
 	private ArrayList<String> menulist;
 	private ArrayAdapter<String> menuAdapter;
+	private ActionBarDrawerToggle mDrawerToggle;
+	private String mTitle;
 
-	
-	
+	private OnClickListener btnAddNote_clickHandler = new OnClickListener() {
 
-	private OnClickListener btnAddNote_clickHandler=new OnClickListener() {
-		
 		@Override
 		public void onClick(View v) {
-			startActivityForResult(new Intent(MainActivity.this, AtyEditNote.class), REQUEST_CODE_ADD_NOTE);
+			startActivityForResult(new Intent(MainActivity.this,
+					AtyEditNote.class), REQUEST_CODE_ADD_NOTE);
 		}
 	};
 	private OnItemClickListener btnMenuList_clickHandler = new OnItemClickListener() {
@@ -48,9 +50,9 @@ public class MainActivity extends ListActivity {
 		public void onItemClick(AdapterView<?> parent, View view, int position,
 				long id) {
 			/*
-			 * ¶¯Ì¬²åÈëÒ»¸öfragementµ½frameLayoutÖÐ
+			 * 将fragment插入到frameLayout中
 			 */
-			
+
 			Fragment contentFragment = new ContentFragment();
 			Bundle args = new Bundle();
 			args.putString("text", menulist.get(position));
@@ -61,70 +63,139 @@ public class MainActivity extends ListActivity {
 					.commit();
 
 			mDrawerLayout.closeDrawer(mDrawList);
-			
+
 		}
 	};
-	
-	
-	
-	
+
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_main);
-		
+
 		db = new NotesDB(this);
 		dbRead = db.getReadableDatabase();
-		
-		adapter = new SimpleCursorAdapter(this, R.layout.notes_list_cell, null, new String[]{NotesDB.COLUMN_NAME_NOTE_NAME,NotesDB.COLUMN_NAME_NOTE_DATE}, new int[]{R.id.tvName,R.id.tvDate});
+
+		adapter = new SimpleCursorAdapter(this, R.layout.notes_list_cell, null,
+				new String[] { NotesDB.COLUMN_NAME_NOTE_NAME,
+						NotesDB.COLUMN_NAME_NOTE_DATE }, new int[] {
+						R.id.tvName, R.id.tvDate });
 		setListAdapter(adapter);
-		
+
 		refreshNotesListView();
+
+		findViewById(R.id.btnAddNote).setOnClickListener(
+				btnAddNote_clickHandler);
+
+		/*
+		 * 
+		 */
 		
-		findViewById(R.id.btnAddNote).setOnClickListener(btnAddNote_clickHandler);
-		
-/*
- * ²à±ßÀ¸²¿·Ö		
- */
+		mTitle = (String) getTitle();
 		mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
 		mDrawList = (ListView) findViewById(R.id.left_drawer);
-		
+
 		menulist = new ArrayList<String>();
 		menulist.add("登陆");
 		menulist.add("上传");
 		menulist.add("下载");
 		menulist.add("共享");
 		menulist.add("反馈");
-		
-		menuAdapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1,menulist);
+
+		menuAdapter = new ArrayAdapter<>(this,
+				android.R.layout.simple_list_item_1, menulist);
 		mDrawList.setAdapter(menuAdapter);
-		mDrawList.setOnItemClickListener(btnMenuList_clickHandler );
-		
-		
-		
-		
+		mDrawList.setOnItemClickListener(btnMenuList_clickHandler);
+/*
+ * 监听侧边栏是否打开，并设置标题,图标
+ */
+		mDrawerToggle = new ActionBarDrawerToggle(this, mDrawerLayout,
+				R.drawable.ic_drawer, R.string.drawer_open,
+				R.string.drawer_close) {
+			@Override
+			public void onDrawerOpened(View drawerView) {
+				// TODO Auto-generated method stub
+				getActionBar().setTitle("choose");
+				invalidateOptionsMenu();  //call onPrepareOptionMenu(),并重写方法
+				
+				super.onDrawerOpened(drawerView);
+			}
+
+			@Override
+			public void onDrawerClosed(View drawerView) {
+				// TODO Auto-generated method stub
+				getActionBar().setTitle(mTitle);
+				invalidateOptionsMenu();
+				super.onDrawerClosed(drawerView);
+				
+			}
+		};
+		mDrawerLayout.setDrawerListener(mDrawerToggle);
+		//开启ActionBar上的APP ICON的功能
+		getActionBar().setDisplayHomeAsUpEnabled(true);
+		getActionBar().setHomeButtonEnabled(true);
+
 	}
+	/*
+	 * 根据侧边栏是否打开变换右上角的功能图标
+	 */
+	@Override
+	public boolean onPrepareOptionsMenu(Menu menu) {
+		// TODO Auto-generated method stub
+		boolean isDrawerOpen =mDrawerLayout.isDrawerOpen(mDrawList);
+		menu.findItem(R.id.action_search).setVisible(!isDrawerOpen);
+		
+		return super.onPrepareOptionsMenu(menu);
+	}
+	
+
+	@Override
+	public boolean onOptionsItemSelected(MenuItem item) {
+	//将actionBar上的图标与drawer结合起来
+		if(mDrawerToggle.onOptionsItemSelected(item)){
+			return true;
+		}
+		return super.onOptionsItemSelected(item);
+	}
+	
+	@Override
+	protected void onPostCreate(Bundle savedInstanceState) {
+		//需要将actionDrawerToggle与drawerLayout同步
+		//将actionBarDrawerToggle的drawer图标，设置为actionBar中的Home-Button
+		mDrawerToggle.syncState();
+		
+		super.onPostCreate(savedInstanceState);
+	}
+	//屏幕旋转时的处理
+	@Override
+	public void onConfigurationChanged(Configuration newConfig) {
+		
+		mDrawerToggle.onConfigurationChanged(newConfig);
+		super.onConfigurationChanged(newConfig);
+	}
+
 	
 	
 	@Override
 	protected void onListItemClick(ListView l, View v, int position, long id) {
-		
+
 		Cursor c = adapter.getCursor();
 		c.moveToPosition(position);
-		
-		Intent i = new Intent(MainActivity.this,AtyEditNote.class);
-		i.putExtra(AtyEditNote.EXTRA_NOTE_ID, c.getInt(c.getColumnIndex(NotesDB.COLUMN_NAME_ID)));
-		i.putExtra(AtyEditNote.EXTRA_NOTE_NAME, c.getString(c.getColumnIndex(NotesDB.COLUMN_NAME_NOTE_NAME)));
-		i.putExtra(AtyEditNote.EXTRA_NOTE_CONTENT, c.getString(c.getColumnIndex(NotesDB.COLUMN_NAME_NOTE_CONTENT)));
+
+		Intent i = new Intent(MainActivity.this, AtyEditNote.class);
+		i.putExtra(AtyEditNote.EXTRA_NOTE_ID,
+				c.getInt(c.getColumnIndex(NotesDB.COLUMN_NAME_ID)));
+		i.putExtra(AtyEditNote.EXTRA_NOTE_NAME,
+				c.getString(c.getColumnIndex(NotesDB.COLUMN_NAME_NOTE_NAME)));
+		i.putExtra(AtyEditNote.EXTRA_NOTE_CONTENT,
+				c.getString(c.getColumnIndex(NotesDB.COLUMN_NAME_NOTE_CONTENT)));
 		startActivityForResult(i, REQUEST_CODE_EDIT_NOTE);
-		
+
 		super.onListItemClick(l, v, position, id);
 	}
-	
-	
+
 	@Override
 	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-		
+
 		switch (requestCode) {
 		case REQUEST_CODE_ADD_NOTE:
 		case REQUEST_CODE_EDIT_NOTE:
@@ -136,16 +207,16 @@ public class MainActivity extends ListActivity {
 		default:
 			break;
 		}
-		
+
 		super.onActivityResult(requestCode, resultCode, data);
 	}
-	
-	public void refreshNotesListView(){
-		
-		adapter.changeCursor(dbRead.query(NotesDB.TABLE_NAME_NOTES, null, null, null, null, null, null));
-		
+
+	public void refreshNotesListView() {
+
+		adapter.changeCursor(dbRead.query(NotesDB.TABLE_NAME_NOTES, null, null,
+				null, null, null, null));
+
 	}
-	
 
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
@@ -153,14 +224,12 @@ public class MainActivity extends ListActivity {
 		getMenuInflater().inflate(R.menu.main, menu);
 		return true;
 	}
-	
-	
+
 	private SimpleCursorAdapter adapter = null;
 	private NotesDB db;
 	private SQLiteDatabase dbRead;
-	
+
 	public static final int REQUEST_CODE_ADD_NOTE = 1;
 	public static final int REQUEST_CODE_EDIT_NOTE = 2;
-	
 
 }
