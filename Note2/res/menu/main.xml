@@ -2,12 +2,19 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     tools:context="com.example.note2.MainActivity" >
-	
-    <item android:id="@+id/action_search"
-        android:icon="@drawable/action_search"
+    
+     <item android:id="@+id/action_search"
+        android:icon="@drawable/actionbar_search_icon"
         android:title="action_search"
         android:actionViewClass="android.widget.SearchView"
-        android:showAsAction="ifRoom|collapseActionView"/>
+        android:showAsAction="ifRoom|collapseActionView"/> 
+    
+    <item android:id="@+id/action_add"
+        android:icon="@drawable/actionbar_add"
+        android:title="action_add"
+        android:showAsAction="always"/>
+    
+	
     <item
         android:id="@+id/action_settings"
         android:orderInCategory="100"

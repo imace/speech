@@ -3,9 +3,6 @@ package com.example.note2;
 import java.util.ArrayList;
 import java.util.List;
 
-import javax.security.auth.PrivateCredentialPermission;
-
-import android.R.integer;
 import android.app.Activity;
 import android.app.Fragment;
 import android.app.FragmentManager;
@@ -17,15 +14,17 @@ import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.support.v4.app.ActionBarDrawerToggle;
 import android.support.v4.widget.DrawerLayout;
+import android.view.ActionMode;
 import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.View.OnClickListener;
+import android.widget.AbsListView.MultiChoiceModeListener;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
-import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.SimpleCursorAdapter;
+import android.widget.Toast;
 
 import com.example.note2.db.NotesDB;
 
@@ -36,15 +35,10 @@ public class MainActivity extends ListActivity {
 	private ActionBarDrawerToggle mDrawerToggle;
 	private String title;
 	private List<DrawerListItem> ListItem = new ArrayList<DrawerListItem>();
+	
+	private ListView mListView;
 
-	private OnClickListener btnAddNote_clickHandler = new OnClickListener() {
-
-		@Override
-		public void onClick(View v) {
-			startActivityForResult(new Intent(MainActivity.this,
-					AtyEditNote.class), REQUEST_CODE_ADD_NOTE);
-		}
-	};
+	
 	private OnItemClickListener btnMenuList_clickHandler = new OnItemClickListener() {
 
 		@Override
@@ -69,6 +63,7 @@ public class MainActivity extends ListActivity {
 		}
 	};
 
+
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -82,11 +77,87 @@ public class MainActivity extends ListActivity {
 						NotesDB.COLUMN_NAME_NOTE_DATE }, new int[] {
 						R.id.tvName, R.id.tvDate });
 		setListAdapter(adapter);
+		/*
+         * 设置多选模式。 
+         */
+		mListView = getListView();
+		mListView.setChoiceMode(ListView.CHOICE_MODE_MULTIPLE_MODAL);
+		mListView.setMultiChoiceModeListener(new MultiChoiceModeListener() {
+			
+			@Override
+			public boolean onPrepareActionMode(ActionMode mode, Menu menu) {
+				// Here you can perform updates to the CAB due to
+		        // an invalidate() request
+		        return false;
+			}
+			
+			@Override
+			public void onDestroyActionMode(ActionMode mode) {
+				   // Here you can make any necessary updates to the activity when
+		        // the CAB is removed. By default, selected items are deselected/unchecked.
+				
+			}
+			
+			@Override
+			public boolean onCreateActionMode(ActionMode mode, Menu menu) {
+				  // Inflate the menu for the CAB
+		        MenuInflater inflater = mode.getMenuInflater();
+		        inflater.inflate(R.menu.context, menu);
+		        
+		        /** 
+	             * 设置ActionMode的标题。 
+	             */  
+	            mode.setTitle("Select Items");
+	            setSubTitle(mode);
+		        return true;
+			}
+			
+			
+
+			@Override
+			public boolean onActionItemClicked(ActionMode mode, MenuItem item) {
+				 // Respond to clicks on the actions in the CAB
+		        switch (item.getItemId()) {
+		            case R.id.menu_delete:
+		                deleteSelectedItems();
+		                mode.finish(); // Action picked, so close the CAB
+		                return true;
+		            default:
+		                return false;
+			}
+			}
+			
+			
+			private void deleteSelectedItems() {
+				Toast.makeText(MainActivity.this,"cool!!!", Toast.LENGTH_LONG).show();
+			}
+
+			@Override
+			public void onItemCheckedStateChanged(ActionMode mode, int position,
+					long id, boolean checked) {
+				 // Here you can do something when items are selected/de-selected,
+		        // such as update the title in the CAB
+				setSubTitle(mode);
+				
+			}
+			private void setSubTitle(ActionMode mode) {
+				final int checkedCount = getListView().getCheckedItemCount();
+				
+				switch (checkedCount) {
+				case 0:
+					mode.setSubtitle(null);
+					break;
+				case 1:  
+                    mode.setSubtitle("1 item selected");  
+                    break;  
+                default:  
+                    mode.setSubtitle(checkedCount + " items selected");  
+                    break;
+				}
+			}
+		});
 
 		refreshNotesListView();
-
-		findViewById(R.id.btnAddNote).setOnClickListener(
-				btnAddNote_clickHandler);
 
 		/*
 		 * 
@@ -125,7 +196,6 @@ public class MainActivity extends ListActivity {
 		menulist.add("Dowload");
 		menulist.add("Share");
 		menulist.add("Feedback");
-
 		menuAdapter = new ArrayAdapter<>(this,
 				android.R.layout.simple_list_item_1, menulist);
 		mDrawList.setAdapter(menuAdapter);*/
@@ -158,7 +228,7 @@ public class MainActivity extends ListActivity {
 		//开启ActionBar上的APP ICON的功能
 		getActionBar().setDisplayHomeAsUpEnabled(true);
 		getActionBar().setHomeButtonEnabled(true);
-		getActionBar().setDisplayShowHomeEnabled(false);
+		getActionBar().setDisplayShowHomeEnabled(true);
 
 	}
 
@@ -179,6 +249,16 @@ public class MainActivity extends ListActivity {
 		// 将actionBar上的图标与drawer结合起来
 		if (mDrawerToggle.onOptionsItemSelected(item)) {
 			return true;
+		}
+		
+		switch (item.getItemId()) {
+		case R.id.action_add:
+			startActivityForResult(new Intent(MainActivity.this,
+					AtyEditNote.class), REQUEST_CODE_ADD_NOTE);
+			break;
+			
+		default:
+			break;
 		}
 		return super.onOptionsItemSelected(item);
 	}

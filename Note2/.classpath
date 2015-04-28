@@ -8,6 +8,6 @@
 	<classpathentry kind="lib" path="E:/workspace/SpeechDemo/libs/Sunflower.jar"/>
 	<classpathentry kind="src" path="src"/>
 	<classpathentry kind="src" path="gen"/>
-	<classpathentry kind="lib" path="/Leap/libs/android-support-v4.jar"/>
+	<classpathentry kind="lib" path="E:/workspace/appcompat_v7/libs/android-support-v4.jar"/>
 	<classpathentry kind="output" path="bin/classes"/>
 </classpath>
