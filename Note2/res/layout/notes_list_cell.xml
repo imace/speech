@@ -8,9 +8,18 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:paddingLeft="4dp"
-        android:paddingRight="4dp"
-        android:textStyle="bold"  />
-
+        android:paddingRight="4dp"  />
+     <!-- <CheckBox 
+         android:id="@+id/tvCheck"
+         android:layout_width="wrap_content"
+         android:layout_height="wrap_content"
+         android:visibility="gone"
+         android:clickable="false"
+		 android:layout_toRightOf="@id/tvName"
+		 android:layout_alignParentRight="true"
+		
+         />
+ -->
     <TextView
         android:id="@+id/tvDate"
         android:layout_width="match_parent"
@@ -18,6 +27,7 @@
         android:paddingLeft="4dp"
         android:paddingRight="4dp"
         android:paddingTop="4dp"
+        android:textColor="#0099CC"
         android:layout_below="@id/tvName" />
 
 </RelativeLayout>

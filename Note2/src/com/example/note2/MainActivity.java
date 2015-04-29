@@ -14,15 +14,20 @@ import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.support.v4.app.ActionBarDrawerToggle;
 import android.support.v4.widget.DrawerLayout;
+import android.util.Log;
 import android.view.ActionMode;
+import android.view.ContextMenu;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.ContextMenu.ContextMenuInfo;
 import android.widget.AbsListView.MultiChoiceModeListener;
 import android.widget.AdapterView;
+import android.widget.AdapterView.AdapterContextMenuInfo;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ListView;
+import android.widget.RelativeLayout;
 import android.widget.SimpleCursorAdapter;
 import android.widget.Toast;
 
@@ -37,6 +42,9 @@ public class MainActivity extends ListActivity {
 	private List<DrawerListItem> ListItem = new ArrayList<DrawerListItem>();
 	
 	private ListView mListView;
+
+	
+
 
 	
 	private OnItemClickListener btnMenuList_clickHandler = new OnItemClickListener() {
@@ -77,9 +85,12 @@ public class MainActivity extends ListActivity {
 						NotesDB.COLUMN_NAME_NOTE_DATE }, new int[] {
 						R.id.tvName, R.id.tvDate });
 		setListAdapter(adapter);
+		//给listview注册上下文菜单
+		mListView = getListView();
+		registerForContextMenu(mListView);
 		/*
          * 设置多选模式。 
-         */
+         
 		mListView = getListView();
 		mListView.setChoiceMode(ListView.CHOICE_MODE_MULTIPLE_MODAL);
 		mListView.setMultiChoiceModeListener(new MultiChoiceModeListener() {
@@ -104,11 +115,11 @@ public class MainActivity extends ListActivity {
 		        MenuInflater inflater = mode.getMenuInflater();
 		        inflater.inflate(R.menu.context, menu);
 		        
-		        /** 
+		        *//** 
 	             * 设置ActionMode的标题。 
-	             */  
+	             *//*  
 	            mode.setTitle("Select Items");
-	            setSubTitle(mode);
+	            setActionModeTitle(mode);
 		        return true;
 			}
 			
@@ -122,6 +133,21 @@ public class MainActivity extends ListActivity {
 		                deleteSelectedItems();
 		                mode.finish(); // Action picked, so close the CAB
 		                return true;
+		            case R.id.menu_cancel: // 全选
+						if (mIsSelectAll) {
+							item.setTitle("取消全选");
+							mIsSelectAll = false;
+
+						} else {
+							item.setTitle("全选");
+							mIsSelectAll = true;
+						}
+						for (int i = 0; i < mListView.getCount(); i++) {
+							mListView.setItemChecked(i,
+									!mIsSelectAll);
+						}
+						return true;
+					
 		            default:
 		                return false;
 			}
@@ -137,17 +163,17 @@ public class MainActivity extends ListActivity {
 					long id, boolean checked) {
 				 // Here you can do something when items are selected/de-selected,
 		        // such as update the title in the CAB
-				setSubTitle(mode);
+				setActionModeTitle(mode);
 				
 			}
-			private void setSubTitle(ActionMode mode) {
+			private void setActionModeTitle(ActionMode mode) {
 				final int checkedCount = getListView().getCheckedItemCount();
 				
 				switch (checkedCount) {
 				case 0:
 					mode.setSubtitle(null);
 					break;
-				case 1:  
+				case 1: 
                     mode.setSubtitle("1 item selected");  
                     break;  
                 default:  
@@ -155,10 +181,10 @@ public class MainActivity extends ListActivity {
                     break;
 				}
 			}
-		});
+		});*/
 
 		refreshNotesListView();
-
+	
 		/*
 		 * 
 		 */
@@ -271,7 +297,34 @@ public class MainActivity extends ListActivity {
 
 		super.onPostCreate(savedInstanceState);
 	}
-
+	@Override
+	public void onCreateContextMenu(ContextMenu menu, View v,
+			ContextMenuInfo menuInfo) {
+		// TODO Auto-generated method stub
+		//加载xml中的上下文菜单
+		MenuInflater inflater = getMenuInflater();
+		inflater.inflate(R.menu.context, menu);
+		super.onCreateContextMenu(menu, v, menuInfo);
+	}
+	@Override
+	public boolean onContextItemSelected(MenuItem item) {
+		 AdapterContextMenuInfo info = (AdapterContextMenuInfo) item.getMenuInfo();
+		// 相应上下文的操作
+		  switch (item.getItemId()) {  
+          case R.id.edit:  
+              Toast.makeText(MainActivity.this, "Edit", Toast.LENGTH_LONG).show();  
+              break;  
+          case R.id.share:  
+              Toast.makeText(MainActivity.this, "share", Toast.LENGTH_LONG).show();  
+              break;  
+          case R.id.delete:  
+              Toast.makeText(MainActivity.this, "delete", Toast.LENGTH_LONG).show();  
+              break;  
+          default:  
+              break;  
+      } 
+		return super.onContextItemSelected(item);
+	}
 	// 屏幕旋转时的处理
 	@Override
 	public void onConfigurationChanged(Configuration newConfig) {
@@ -282,21 +335,22 @@ public class MainActivity extends ListActivity {
 
 	@Override
 	protected void onListItemClick(ListView l, View v, int position, long id) {
+			Cursor c = adapter.getCursor();
+			c.moveToPosition(position);
+			
+			Intent i = new Intent(MainActivity.this, AtyEditNote.class);
+			i.putExtra(AtyEditNote.EXTRA_NOTE_ID,
+					c.getInt(c.getColumnIndex(NotesDB.COLUMN_NAME_ID)));
+			i.putExtra(AtyEditNote.EXTRA_NOTE_NAME,
+					c.getString(c.getColumnIndex(NotesDB.COLUMN_NAME_NOTE_NAME)));
+			i.putExtra(AtyEditNote.EXTRA_NOTE_CONTENT,
+					c.getString(c.getColumnIndex(NotesDB.COLUMN_NAME_NOTE_CONTENT)));
+			startActivityForResult(i, REQUEST_CODE_EDIT_NOTE);
 
-		Cursor c = adapter.getCursor();
-		c.moveToPosition(position);
-
-		Intent i = new Intent(MainActivity.this, AtyEditNote.class);
-		i.putExtra(AtyEditNote.EXTRA_NOTE_ID,
-				c.getInt(c.getColumnIndex(NotesDB.COLUMN_NAME_ID)));
-		i.putExtra(AtyEditNote.EXTRA_NOTE_NAME,
-				c.getString(c.getColumnIndex(NotesDB.COLUMN_NAME_NOTE_NAME)));
-		i.putExtra(AtyEditNote.EXTRA_NOTE_CONTENT,
-				c.getString(c.getColumnIndex(NotesDB.COLUMN_NAME_NOTE_CONTENT)));
-		startActivityForResult(i, REQUEST_CODE_EDIT_NOTE);
-
+		
 		super.onListItemClick(l, v, position, id);
 	}
+	
 
 	@Override
 	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
