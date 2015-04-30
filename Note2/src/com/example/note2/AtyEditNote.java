@@ -2,11 +2,13 @@ package com.example.note2;
 
 import java.io.File;
 import java.io.IOException;
-import java.text.SimpleDateFormat;
+import java.text.DateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+import android.R.anim;
+import android.app.ActionBar;
 import android.app.ListActivity;
 import android.content.ContentValues;
 import android.content.Context;
@@ -18,10 +20,12 @@ import android.os.Bundle;
 import android.os.Environment;
 import android.provider.MediaStore;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
-import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.ListView;
@@ -30,77 +34,46 @@ import android.widget.Toast;
 
 import com.example.note2.arcmenu.ArcMenu;
 import com.example.note2.arcmenu.ArcMenu.OnMenuItemClickListener;
-import com.example.note2.arcmenu.ArcMenu.Position;
 import com.example.note2.db.NotesDB;
 
 public class AtyEditNote extends ListActivity {
-	
+
 	private ArcMenu arcMenu;
 
-	
-
-/*
-	private OnClickListener btnClickHandler = new OnClickListener() {
-
-		File f;
-		Intent i;
-		
-
-		@Override
-		public void onClick(View v) {
-			switch (v.getId()) {
-			case R.id.sat_camera:
-
-				i = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-				f = new File(getMediaDir(), System.currentTimeMillis() + ".jpg");
-				if (!f.exists()) {
-					try {
-						f.createNewFile();
-					} catch (IOException e) {
-						e.printStackTrace();
-					}
-				}
-				currentPath = f.getAbsolutePath();
-				i.putExtra(MediaStore.EXTRA_OUTPUT, Uri.fromFile(f));// 媒体输出路径,存储位置
-				startActivityForResult(i, REQUEST_CODE_GET_PHOTO);
-				break;
-			case R.id.sat_Video:
-
-				i = new Intent(MediaStore.ACTION_VIDEO_CAPTURE);
-				f = new File(getMediaDir(), System.currentTimeMillis() + ".mp4");
-				if (!f.exists()) {
-					try {
-						f.createNewFile();
-					} catch (IOException e) {
-						e.printStackTrace();
-					}
-				}
-				currentPath = f.getAbsolutePath();
-				i.putExtra(MediaStore.EXTRA_OUTPUT, Uri.fromFile(f));
-
-				startActivityForResult(i, REQUEST_CODE_GET_VIDEO);
-				break;
-			case R.id.sat_Save:
-				saveMedia(saveNote());
-				setResult(RESULT_OK);
-				finish();
-				break;
-			case R.id.sat_Cancel:
-				setResult(RESULT_CANCELED);
-				finish();
-				break;
-			case R.id.sat_Record:
-				
-				Intent i = new Intent(AtyEditNote.this,IatDemo.class);
-				
-				startActivityForResult(i, REQUEST_CODE_GET_SOUND);
-
-			default:
-				break;
-			}
-		}
-	};*/
-
+	/*
+	 * private OnClickListener btnClickHandler = new OnClickListener() {
+	 * 
+	 * File f; Intent i;
+	 * 
+	 * 
+	 * @Override public void onClick(View v) { switch (v.getId()) { case
+	 * R.id.sat_camera:
+	 * 
+	 * i = new Intent(MediaStore.ACTION_IMAGE_CAPTURE); f = new
+	 * File(getMediaDir(), System.currentTimeMillis() + ".jpg"); if
+	 * (!f.exists()) { try { f.createNewFile(); } catch (IOException e) {
+	 * e.printStackTrace(); } } currentPath = f.getAbsolutePath();
+	 * i.putExtra(MediaStore.EXTRA_OUTPUT, Uri.fromFile(f));// 媒体输出路径,存储位置
+	 * startActivityForResult(i, REQUEST_CODE_GET_PHOTO); break; case
+	 * R.id.sat_Video:
+	 * 
+	 * i = new Intent(MediaStore.ACTION_VIDEO_CAPTURE); f = new
+	 * File(getMediaDir(), System.currentTimeMillis() + ".mp4"); if
+	 * (!f.exists()) { try { f.createNewFile(); } catch (IOException e) {
+	 * e.printStackTrace(); } } currentPath = f.getAbsolutePath();
+	 * i.putExtra(MediaStore.EXTRA_OUTPUT, Uri.fromFile(f));
+	 * 
+	 * startActivityForResult(i, REQUEST_CODE_GET_VIDEO); break; case
+	 * R.id.sat_Save: saveMedia(saveNote()); setResult(RESULT_OK); finish();
+	 * break; case R.id.sat_Cancel: setResult(RESULT_CANCELED); finish(); break;
+	 * case R.id.sat_Record:
+	 * 
+	 * Intent i = new Intent(AtyEditNote.this,IatDemo.class);
+	 * 
+	 * startActivityForResult(i, REQUEST_CODE_GET_SOUND);
+	 * 
+	 * default: break; } } };
+	 */
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -135,85 +108,89 @@ public class AtyEditNote extends ListActivity {
 		}
 		initView();
 		initEvent();
-	
-	
+
+		// actionbar导航
+		ActionBar actionBar = getActionBar();
+		actionBar.setTitle("                    滴滴备忘");
+		actionBar.setHomeAsUpIndicator(R.drawable.actionbar_back_icon);
+		actionBar.setDisplayHomeAsUpEnabled(true);// 设置返回图标
+		actionBar.setDisplayShowHomeEnabled(false);// 没有系统图标
+		actionBar.setHomeButtonEnabled(true);// 设置左侧返回图标，其中setHomeButtonEnabled和setDisplayShowHomeEnabled共同起作用，
+		//如果setHomeButtonEnabled设成false，即使setDisplayShowHomeEnabled设成true，图标也不能点击
+
 	}
 
-
 	private void initEvent() {
-	arcMenu.setOnMenuItemClickListener(new OnMenuItemClickListener() {
-		
+		arcMenu.setOnMenuItemClickListener(new OnMenuItemClickListener() {
 
-		File f;
-		Intent i;
-		
-		
-		@Override
-		public void onClick(View view, int pos) {
-			switch (pos) {
-			case 1:
-				i = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-				f = new File(getMediaDir(), System.currentTimeMillis() + ".jpg");
-				if (!f.exists()) {
-					try {
-						f.createNewFile();
-					} catch (IOException e) {
-						e.printStackTrace();
+			File f;
+			Intent i;
+
+			@Override
+			public void onClick(View view, int pos) {
+				switch (pos) {
+				case 1:
+					i = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+					f = new File(getMediaDir(), System.currentTimeMillis()
+							+ ".jpg");
+					if (!f.exists()) {
+						try {
+							f.createNewFile();
+						} catch (IOException e) {
+							e.printStackTrace();
+						}
 					}
-				}
-				currentPath = f.getAbsolutePath();
-				i.putExtra(MediaStore.EXTRA_OUTPUT, Uri.fromFile(f));// 媒体输出路径,存储位置
-				startActivityForResult(i, REQUEST_CODE_GET_PHOTO);
-				break;
-			case 5:
+					currentPath = f.getAbsolutePath();
+					i.putExtra(MediaStore.EXTRA_OUTPUT, Uri.fromFile(f));// 媒体输出路径,存储位置
+					startActivityForResult(i, REQUEST_CODE_GET_PHOTO);
+					break;
+				case 5:
 
-				i = new Intent(MediaStore.ACTION_VIDEO_CAPTURE);
-				f = new File(getMediaDir(), System.currentTimeMillis() + ".mp4");
-				if (!f.exists()) {
-					try {
-						f.createNewFile();
-					} catch (IOException e) {
-						e.printStackTrace();
+					i = new Intent(MediaStore.ACTION_VIDEO_CAPTURE);
+					f = new File(getMediaDir(), System.currentTimeMillis()
+							+ ".mp4");
+					if (!f.exists()) {
+						try {
+							f.createNewFile();
+						} catch (IOException e) {
+							e.printStackTrace();
+						}
 					}
+					currentPath = f.getAbsolutePath();
+					i.putExtra(MediaStore.EXTRA_OUTPUT, Uri.fromFile(f));
+
+					startActivityForResult(i, REQUEST_CODE_GET_VIDEO);
+					break;
+				case 3:
+					saveMedia(saveNote());
+					setResult(RESULT_OK);
+					finish();
+					break;
+				case 4:
+					setResult(RESULT_CANCELED);
+					finish();
+					break;
+				case 2:
+
+					Intent i = new Intent(AtyEditNote.this, IatDemo.class);
+
+					startActivityForResult(i, REQUEST_CODE_GET_SOUND);
+
+				default:
+					break;
+
 				}
-				currentPath = f.getAbsolutePath();
-				i.putExtra(MediaStore.EXTRA_OUTPUT, Uri.fromFile(f));
+			}
 
-				startActivityForResult(i, REQUEST_CODE_GET_VIDEO);
-				break;
-			case 3:
-				saveMedia(saveNote());
-				setResult(RESULT_OK);
-				finish();
-				break;
-			case 4:
-				setResult(RESULT_CANCELED);
-				finish();
-				break;
-			case 2:
-				
-				Intent i = new Intent(AtyEditNote.this,IatDemo.class);
-				
-				startActivityForResult(i, REQUEST_CODE_GET_SOUND);
+		});
 
-			default:
-				break;
-			
-		}
-	}	
-			
-		
-	});
-	
-}
-
+	}
 
 	private void initView() {
 
 		arcMenu = (ArcMenu) findViewById(R.id.id_menu);
 
 	}
-	
 
 	@Override
 	protected void onListItemClick(ListView l, View v, int position, long id) {
@@ -233,14 +210,14 @@ public class AtyEditNote extends ListActivity {
 			startActivity(i);
 			break;
 		case MediaType.SOUND:
-			
+
 			i = new Intent(this, AtySoundViewer.class);
-			i.putExtra(AtySoundViewer.EXTRA_PATH,data.path);
+			i.putExtra(AtySoundViewer.EXTRA_PATH, data.path);
 			startActivity(i);
-			
+
 			break;
-			default:
-				break;
+		default:
+			break;
 		}
 
 		super.onListItemClick(l, v, position, id);
@@ -249,37 +226,35 @@ public class AtyEditNote extends ListActivity {
 	@Override
 	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
 
-
-
 		switch (requestCode) {
 		case REQUEST_CODE_GET_PHOTO:
 		case REQUEST_CODE_GET_VIDEO:
-			
+
 			if (resultCode == RESULT_OK) {
 				adapter.add(new MediaListCellData(currentPath));
 				adapter.notifyDataSetChanged();
-			    Uri audioPath = data.getData();  
-		        Toast.makeText(this, audioPath.toString(), Toast.LENGTH_LONG).show(); 
+				Uri audioPath = data.getData();
+				Toast.makeText(this, audioPath.toString(), Toast.LENGTH_LONG)
+						.show();
 			}
 			break;
 		case REQUEST_CODE_GET_SOUND:
 
-			if (resultCode == RESULT_OK||resultCode==3) {
-				/*audioPath = data.getData();  //获取到Uri
-				Toast.makeText(this, audioPath.toString(), Toast.LENGTH_LONG).show(); 
-				recordPath = audioPath.toString();//转换
-				System.out.println(recordPath);
-				
-				adapter.add(new MediaListCellData(recordPath));
-				adapter.notifyDataSetChanged();
-		        */
-				
-				
+			if (resultCode == RESULT_OK || resultCode == 3) {
 				/*
-				 * 获取wav的Path	
+				 * audioPath = data.getData(); //获取到Uri Toast.makeText(this,
+				 * audioPath.toString(), Toast.LENGTH_LONG).show(); recordPath =
+				 * audioPath.toString();//转换 System.out.println(recordPath);
+				 * 
+				 * adapter.add(new MediaListCellData(recordPath));
+				 * adapter.notifyDataSetChanged();
+				 */
+
+				/*
+				 * 获取wav的Path
 				 */
 				String wavPath = data.getExtras().getString("wavPath");
-				System.out.println("____________________________"+wavPath);
+				System.out.println("____________________________" + wavPath);
 				adapter.add(new MediaListCellData(wavPath));
 				adapter.notifyDataSetChanged();
 			}
@@ -319,12 +294,16 @@ public class AtyEditNote extends ListActivity {
 	}
 
 	public int saveNote() {
+		DateFormat date = DateFormat.getDateTimeInstance(DateFormat.LONG,
+				DateFormat.SHORT); // 显示日期，时间（精确到分）
+		String Date = date.format(new Date());
 
 		ContentValues cv = new ContentValues();
 		cv.put(NotesDB.COLUMN_NAME_NOTE_NAME, etName.getText().toString());
 		cv.put(NotesDB.COLUMN_NAME_NOTE_CONTENT, etContent.getText().toString());
-		cv.put(NotesDB.COLUMN_NAME_NOTE_DATE, new SimpleDateFormat(
-				"yyyy-MM-dd hh:mm:ss").format(new Date()));
+		cv.put(NotesDB.COLUMN_NAME_NOTE_DATE, Date);
+		// cv.put(NotesDB.COLUMN_NAME_NOTE_DATE, new SimpleDateFormat(
+		// "yyyy-MM-dd HH:mm:ss").format(new Date()));
 
 		if (noteId > -1) {
 			dbWrite.update(NotesDB.TABLE_NAME_NOTES, cv, NotesDB.COLUMN_NAME_ID
@@ -348,11 +327,11 @@ public class AtyEditNote extends ListActivity {
 	private NotesDB db;
 	private SQLiteDatabase dbRead, dbWrite;
 	private String currentPath = null;
-	
+
 	private Uri audioPath;
 	private String recordPath;
 	private String wavPath;
-	
+
 	public static final int REQUEST_CODE_GET_PHOTO = 1;
 	public static final int REQUEST_CODE_GET_VIDEO = 2;
 	public static final int REQUEST_CODE_GET_SOUND = 3;
@@ -445,5 +424,26 @@ public class AtyEditNote extends ListActivity {
 		static final int SOUND = 3;
 	}
 
-	
+	/*
+	 * 设置actionbar
+	 */
+	@Override
+	public boolean onCreateOptionsMenu(Menu menu) {
+		MenuInflater inflater = getMenuInflater();
+		inflater.inflate(R.menu.edit_actionbar_menu, menu);
+		return super.onCreateOptionsMenu(menu);
+	}
+	@Override
+	public boolean onOptionsItemSelected(MenuItem item) {
+		switch (item.getItemId()) {
+		case android.R.id.home:
+			finish();
+			return true;
+
+		default:
+			break;
+		}
+		return super.onOptionsItemSelected(item);
+	}
+
 }

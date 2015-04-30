@@ -18,16 +18,16 @@
         android:id="@+id/edit"
         android:orderInCategory="100"
         android:showAsAction="never"
-        android:title="edit"/>
+        android:title="编辑"/>
     <item
         android:id="@+id/share"
         android:orderInCategory="100"
         android:showAsAction="never"
-        android:title="share"/>
+        android:title="收藏"/>
     <item
         android:id="@+id/delete"
         android:orderInCategory="100"
         android:showAsAction="never"
-        android:title="delete"/>
+        android:title="删除"/>
 
 </menu>

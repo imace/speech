@@ -1220,41 +1220,43 @@ containing a value of this type.
         public static final int action_add=0x7f020057;
         public static final int action_search=0x7f020058;
         public static final int actionbar_add=0x7f020059;
-        public static final int actionbar_background=0x7f020075;
-        public static final int actionbar_cancel_icon=0x7f02005a;
-        public static final int actionbar_delete_icon=0x7f02005b;
-        public static final int actionbar_search_icon=0x7f02005c;
-        public static final int activated_background_color=0x7f020076;
-        public static final int composer_button=0x7f02005d;
-        public static final int composer_camera=0x7f02005e;
-        public static final int composer_icn_plus=0x7f02005f;
-        public static final int composer_music=0x7f020060;
-        public static final int composer_place=0x7f020061;
-        public static final int composer_sleep=0x7f020062;
-        public static final int composer_thought=0x7f020063;
-        public static final int composer_with=0x7f020064;
-        public static final int ic_drawer=0x7f020065;
-        public static final int ic_drawer_collect_normal=0x7f020066;
-        public static final int ic_drawer_draft_normal=0x7f020067;
-        public static final int ic_drawer_explore_normal=0x7f020068;
-        public static final int ic_drawer_follow_normal=0x7f020069;
-        public static final int ic_drawer_home_normal=0x7f02006a;
-        public static final int ic_drawer_question_normal=0x7f02006b;
-        public static final int ic_drawer_search_normal=0x7f02006c;
-        public static final int ic_drawer_setting_normal=0x7f02006d;
-        public static final int ic_launcher=0x7f02006e;
-        public static final int ic_search=0x7f02006f;
-        public static final int ic_star_light=0x7f020070;
-        public static final int icon_photo=0x7f020071;
-        public static final int icon_sound=0x7f020072;
-        public static final int icon_video=0x7f020073;
-        public static final int item_selector=0x7f020074;
+        public static final int actionbar_back_icon=0x7f02005a;
+        public static final int actionbar_background=0x7f020077;
+        public static final int actionbar_cancel_icon=0x7f02005b;
+        public static final int actionbar_delete_icon=0x7f02005c;
+        public static final int actionbar_refresh_icon=0x7f02005d;
+        public static final int actionbar_search_icon=0x7f02005e;
+        public static final int activated_background_color=0x7f020078;
+        public static final int composer_button=0x7f02005f;
+        public static final int composer_camera=0x7f020060;
+        public static final int composer_icn_plus=0x7f020061;
+        public static final int composer_music=0x7f020062;
+        public static final int composer_place=0x7f020063;
+        public static final int composer_sleep=0x7f020064;
+        public static final int composer_thought=0x7f020065;
+        public static final int composer_with=0x7f020066;
+        public static final int ic_drawer=0x7f020067;
+        public static final int ic_drawer_collect_normal=0x7f020068;
+        public static final int ic_drawer_draft_normal=0x7f020069;
+        public static final int ic_drawer_explore_normal=0x7f02006a;
+        public static final int ic_drawer_follow_normal=0x7f02006b;
+        public static final int ic_drawer_home_normal=0x7f02006c;
+        public static final int ic_drawer_question_normal=0x7f02006d;
+        public static final int ic_drawer_search_normal=0x7f02006e;
+        public static final int ic_drawer_setting_normal=0x7f02006f;
+        public static final int ic_launcher=0x7f020070;
+        public static final int ic_search=0x7f020071;
+        public static final int ic_star_light=0x7f020072;
+        public static final int icon_photo=0x7f020073;
+        public static final int icon_sound=0x7f020074;
+        public static final int icon_video=0x7f020075;
+        public static final int item_selector=0x7f020076;
     }
     public static final class id {
         public static final int Button01=0x7f05004b;
         public static final int Button02=0x7f05004c;
         public static final int SeekBar01=0x7f05004a;
-        public static final int action_add=0x7f050062;
+        public static final int action_add=0x7f050063;
         public static final int action_bar=0x7f050025;
         public static final int action_bar_activity_content=0x7f05001a;
         public static final int action_bar_container=0x7f050024;
@@ -1263,12 +1265,12 @@ containing a value of this type.
         public static final int action_bar_subtitle=0x7f05002c;
         public static final int action_bar_title=0x7f05002b;
         public static final int action_context_bar=0x7f050026;
-        public static final int action_logout=0x7f050064;
+        public static final int action_logout=0x7f050065;
         public static final int action_menu_divider=0x7f05001b;
         public static final int action_menu_presenter=0x7f05001c;
         public static final int action_mode_close_button=0x7f05002d;
-        public static final int action_search=0x7f050061;
-        public static final int action_settings=0x7f050063;
+        public static final int action_search=0x7f050062;
+        public static final int action_settings=0x7f050064;
         public static final int activity_chooser_view_content=0x7f05002e;
         public static final int always=0x7f050011;
         public static final int beginning=0x7f050016;
@@ -1307,6 +1309,7 @@ containing a value of this type.
         public static final int listMode=0x7f050007;
         public static final int list_item=0x7f050032;
         public static final int margin=0x7f050002;
+        public static final int menu_refresh=0x7f050061;
         public static final int middle=0x7f050017;
         public static final int never=0x7f05000f;
         public static final int none=0x7f050004;
@@ -1417,7 +1420,8 @@ containing a value of this type.
     }
     public static final class menu {
         public static final int context=0x7f0d0000;
-        public static final int main=0x7f0d0001;
+        public static final int edit_actionbar_menu=0x7f0d0001;
+        public static final int main=0x7f0d0002;
     }
     public static final class string {
         /**  Content description for the action bar "home" affordance. [CHAR LIMIT=NONE] 
@@ -1460,7 +1464,9 @@ containing a value of this type.
         /**  Description of a share target (both in the list of such or the default share button) in a ShareActionProvider (share UI). [CHAR LIMIT=NONE] 
          */
         public static final int abc_shareactionprovider_share_with_application=0x7f0a000b;
+        public static final int action_cancel=0x7f0a0014;
         public static final int action_logout=0x7f0a0013;
+        public static final int action_refresh=0x7f0a0015;
         public static final int action_settings=0x7f0a0010;
         public static final int app_name=0x7f0a000d;
         public static final int drawer_close=0x7f0a0012;
