@@ -3,32 +3,39 @@ package com.example.note2;
 import java.util.ArrayList;
 import java.util.List;
 
+import android.app.ActionBar.LayoutParams;
 import android.app.Activity;
+import android.app.Dialog;
 import android.app.Fragment;
 import android.app.FragmentManager;
 import android.app.ListActivity;
+import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.res.Configuration;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.v4.app.ActionBarDrawerToggle;
 import android.support.v4.widget.DrawerLayout;
-import android.util.Log;
-import android.view.ActionMode;
+import android.support.v7.widget.SearchView;
 import android.view.ContextMenu;
+import android.view.ContextMenu.ContextMenuInfo;
+import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.ContextMenu.ContextMenuInfo;
-import android.widget.AbsListView.MultiChoiceModeListener;
+import android.view.WindowManager;
 import android.widget.AdapterView;
 import android.widget.AdapterView.AdapterContextMenuInfo;
 import android.widget.AdapterView.OnItemClickListener;
+import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.RelativeLayout;
 import android.widget.SimpleCursorAdapter;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.note2.db.NotesDB;
@@ -42,6 +49,8 @@ public class MainActivity extends ListActivity {
 	private List<DrawerListItem> ListItem = new ArrayList<DrawerListItem>();
 	
 	private ListView mListView;
+	
+	private SearchView searchView;
 
 	
 
@@ -85,9 +94,11 @@ public class MainActivity extends ListActivity {
 						NotesDB.COLUMN_NAME_NOTE_DATE }, new int[] {
 						R.id.tvName, R.id.tvDate });
 		setListAdapter(adapter);
-		//给listview注册上下文菜单
+		//获取并给listview注册上下文菜单
 		mListView = getListView();
 		registerForContextMenu(mListView);
+		
+		
 		/*
          * 设置多选模式。 
          
@@ -235,7 +246,7 @@ public class MainActivity extends ListActivity {
 			@Override
 			public void onDrawerOpened(View drawerView) {
 				// TODO Auto-generated method stub
-				getActionBar().setTitle("智能备忘录");
+				getActionBar().setTitle("滴滴备忘");
 				invalidateOptionsMenu();  //call onPrepareOptionMenu(),并重写方法
 				
 				super.onDrawerOpened(drawerView);
@@ -254,8 +265,8 @@ public class MainActivity extends ListActivity {
 		//开启ActionBar上的APP ICON的功能
 		getActionBar().setDisplayHomeAsUpEnabled(true);
 		getActionBar().setHomeButtonEnabled(true);
-		getActionBar().setDisplayShowHomeEnabled(true);
-
+		getActionBar().setDisplayShowHomeEnabled(false);//
+		
 	}
 
 	/*
@@ -390,5 +401,9 @@ public class MainActivity extends ListActivity {
 
 	public static final int REQUEST_CODE_ADD_NOTE = 1;
 	public static final int REQUEST_CODE_EDIT_NOTE = 2;
+	
+	
+
+	
 
 }

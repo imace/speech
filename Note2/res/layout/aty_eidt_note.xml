@@ -1,13 +1,22 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:orientation="vertical" >
+    android:layout_height="match_parent" >
 
     <LinearLayout
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical" >
+
+        <TextView
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10.0dip"
+            android:gravity="center_vertical"
+            android:paddingLeft="4.0dip"
+            android:text="标题"
+            android:textColor="#ff888888"
+            android:textSize="16.0sp" />
 
         <EditText
             android:id="@+id/etName"
@@ -16,9 +25,17 @@
             android:ems="10"
             android:hint="标题..."
             android:singleLine="true" >
-
-            <requestFocus />
         </EditText>
+
+        <TextView
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="10.0dip"
+            android:gravity="center_vertical"
+            android:paddingLeft="4.0dip"
+            android:text="内容"
+            android:textColor="#ff888888"
+            android:textSize="16.0sp" />
 
         <EditText
             android:id="@+id/etContent"
@@ -28,7 +45,10 @@
             android:ems="10"
             android:hint="说点什么吧.."
             android:lines="3"
-            android:scrollbars="vertical" />
+            android:scrollbars="vertical" >
+
+            <requestFocus />
+        </EditText>
         <!-- style="?android:listSeparatorTextViewStyle" -->
 
         <ListView
@@ -39,40 +59,5 @@
     </LinearLayout>
 
     <include layout="@layout/left_bottom" />
-   <!--  <RelativeLayout
-        android:id="@+id/relative"
-        android:layout_width="fill_parent"
-        android:layout_height="50dp"
-        android:background="@drawable/actionbar_background"
-        android:gravity="bottom" >
 
-        <Button
-            android:id="@+id/cancle"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_centerVertical="true"
-            android:background="@null"
-            android:text="撤销                    |"
-            android:textSize="20sp" />
-
-        <TextView
-            android:id="@+id/txtcount"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_centerInParent="true"
-            android:text="共计"
-            android:textSize="15sp" />
-
-        <Button
-            android:id="@+id/delete"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentRight="true"
-            android:layout_centerVertical="true"
-            android:background="@null"
-            android:text="  删除"
-            android:textSize="20sp" />
-    </RelativeLayout> -->
-
-
-</LinearLayout>
+</RelativeLayout>
