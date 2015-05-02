@@ -19,26 +19,32 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
 import android.provider.MediaStore;
+import android.view.ContextMenu;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.ContextMenu.ContextMenuInfo;
 import android.widget.BaseAdapter;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
+import android.widget.AdapterView.AdapterContextMenuInfo;
 
 import com.example.note2.arcmenu.ArcMenu;
 import com.example.note2.arcmenu.ArcMenu.OnMenuItemClickListener;
+import com.example.note2.arcmenu.ArcMenu.Position;
 import com.example.note2.db.NotesDB;
 
 public class AtyEditNote extends ListActivity {
 
 	private ArcMenu arcMenu;
+	
+	private ListView mListView;
 
 	/*
 	 * private OnClickListener btnClickHandler = new OnClickListener() {
@@ -117,9 +123,42 @@ public class AtyEditNote extends ListActivity {
 		actionBar.setDisplayShowHomeEnabled(false);// 没有系统图标
 		actionBar.setHomeButtonEnabled(true);// 设置左侧返回图标，其中setHomeButtonEnabled和setDisplayShowHomeEnabled共同起作用，
 		//如果setHomeButtonEnabled设成false，即使setDisplayShowHomeEnabled设成true，图标也不能点击
+		
+		mListView = getListView();
+		registerForContextMenu(mListView);
+		
 
 	}
-
+	
+	public void onCreateContextMenu(ContextMenu menu, View v,
+			ContextMenuInfo menuInfo) {
+		// TODO Auto-generated method stub
+		//加载xml中的上下文菜单
+		MenuInflater inflater = getMenuInflater();
+		inflater.inflate(R.menu.context, menu);
+		super.onCreateContextMenu(menu, v, menuInfo);
+	}
+	@Override
+	public boolean onContextItemSelected(MenuItem item) {
+		 AdapterContextMenuInfo info = (AdapterContextMenuInfo) item.getMenuInfo();
+		// 相应上下文的操作
+		  switch (item.getItemId()) {  
+          case R.id.edit:
+      
+              break;  
+          case R.id.share:  
+              Toast.makeText(AtyEditNote.this, "share", Toast.LENGTH_LONG).show();  
+              break;  
+          case R.id.delete:  
+              Toast.makeText(AtyEditNote.this, "delete", Toast.LENGTH_LONG).show();  
+              break;  
+          default:  
+              break;  
+      } 
+		return super.onContextItemSelected(item);
+	}
+	
+	
 	private void initEvent() {
 		arcMenu.setOnMenuItemClickListener(new OnMenuItemClickListener() {
 
@@ -144,7 +183,7 @@ public class AtyEditNote extends ListActivity {
 					i.putExtra(MediaStore.EXTRA_OUTPUT, Uri.fromFile(f));// 媒体输出路径,存储位置
 					startActivityForResult(i, REQUEST_CODE_GET_PHOTO);
 					break;
-				case 5:
+				case 4:
 
 					i = new Intent(MediaStore.ACTION_VIDEO_CAPTURE);
 					f = new File(getMediaDir(), System.currentTimeMillis()
@@ -166,7 +205,7 @@ public class AtyEditNote extends ListActivity {
 					setResult(RESULT_OK);
 					finish();
 					break;
-				case 4:
+				case 5:
 					setResult(RESULT_CANCELED);
 					finish();
 					break;

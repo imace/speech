@@ -1,20 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android" >
 
-    <!--
-    <item android:id="@+id/menu_cancel"
-        android:icon="@drawable/actionbar_cancel_icon"
-        android:title="action_cancel"
-        android:showAsAction="always"
-        />
+    
+    
 
-    <item android:id="@+id/menu_delete"
+  <!--   <item android:id="@+id/menu_delete"
         android:icon="@drawable/actionbar_delete_icon"
         android:title="action_delete"
         android:showAsAction="always"
         />
-    -->
-    <item
+     -->
+     <item
         android:id="@+id/edit"
         android:orderInCategory="100"
         android:showAsAction="never"
@@ -28,6 +24,6 @@
         android:id="@+id/delete"
         android:orderInCategory="100"
         android:showAsAction="never"
-        android:title="删除"/>
+        android:title="删除"/> 
 
 </menu>

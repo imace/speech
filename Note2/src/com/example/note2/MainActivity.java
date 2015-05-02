@@ -3,41 +3,38 @@ package com.example.note2;
 import java.util.ArrayList;
 import java.util.List;
 
-import android.app.ActionBar.LayoutParams;
 import android.app.Activity;
-import android.app.Dialog;
 import android.app.Fragment;
 import android.app.FragmentManager;
 import android.app.ListActivity;
-import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.res.Configuration;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
-import android.os.Handler;
 import android.support.v4.app.ActionBarDrawerToggle;
 import android.support.v4.widget.DrawerLayout;
-import android.support.v7.widget.SearchView;
+import android.util.TypedValue;
 import android.view.ContextMenu;
 import android.view.ContextMenu.ContextMenuInfo;
-import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.WindowManager;
 import android.widget.AdapterView;
 import android.widget.AdapterView.AdapterContextMenuInfo;
 import android.widget.AdapterView.OnItemClickListener;
-import android.widget.EditText;
 import android.widget.ListView;
-import android.widget.RelativeLayout;
 import android.widget.SimpleCursorAdapter;
-import android.widget.TextView;
 import android.widget.Toast;
 
+import com.baoyz.swipemenulistview.SwipeMenu;
+import com.baoyz.swipemenulistview.SwipeMenuCreator;
+import com.baoyz.swipemenulistview.SwipeMenuItem;
+import com.baoyz.swipemenulistview.SwipeMenuListView;
+import com.baoyz.swipemenulistview.SwipeMenuListView.OnMenuItemClickListener;
 import com.example.note2.db.NotesDB;
 
 public class MainActivity extends ListActivity {
@@ -48,11 +45,9 @@ public class MainActivity extends ListActivity {
 	private String title;
 	private List<DrawerListItem> ListItem = new ArrayList<DrawerListItem>();
 	
-	private ListView mListView;
+	private SwipeMenuListView mListView;
 	
-	private SearchView searchView;
 
-	
 
 
 	
@@ -94,110 +89,17 @@ public class MainActivity extends ListActivity {
 						NotesDB.COLUMN_NAME_NOTE_DATE,NotesDB.COLUMN_NAME_NOTE_CONTENT }, new int[] {
 						R.id.tvName, R.id.tvDate,R.id.tvContent });
 		setListAdapter(adapter);
+		
+		
 		//获取并给listview注册上下文菜单
-		mListView = getListView();
+		mListView = (SwipeMenuListView) getListView();
 		registerForContextMenu(mListView);
-		
-		
-		/*
-         * 设置多选模式。 
-         
-		mListView = getListView();
-		mListView.setChoiceMode(ListView.CHOICE_MODE_MULTIPLE_MODAL);
-		mListView.setMultiChoiceModeListener(new MultiChoiceModeListener() {
-			
-			@Override
-			public boolean onPrepareActionMode(ActionMode mode, Menu menu) {
-				// Here you can perform updates to the CAB due to
-		        // an invalidate() request
-		        return false;
-			}
-			
-			@Override
-			public void onDestroyActionMode(ActionMode mode) {
-				   // Here you can make any necessary updates to the activity when
-		        // the CAB is removed. By default, selected items are deselected/unchecked.
-				
-			}
-			
-			@Override
-			public boolean onCreateActionMode(ActionMode mode, Menu menu) {
-				  // Inflate the menu for the CAB
-		        MenuInflater inflater = mode.getMenuInflater();
-		        inflater.inflate(R.menu.context, menu);
-		        
-		        *//** 
-	             * 设置ActionMode的标题。 
-	             *//*  
-	            mode.setTitle("Select Items");
-	            setActionModeTitle(mode);
-		        return true;
-			}
-			
-			
-
-			@Override
-			public boolean onActionItemClicked(ActionMode mode, MenuItem item) {
-				 // Respond to clicks on the actions in the CAB
-		        switch (item.getItemId()) {
-		            case R.id.menu_delete:
-		                deleteSelectedItems();
-		                mode.finish(); // Action picked, so close the CAB
-		                return true;
-		            case R.id.menu_cancel: // 全选
-						if (mIsSelectAll) {
-							item.setTitle("取消全选");
-							mIsSelectAll = false;
-
-						} else {
-							item.setTitle("全选");
-							mIsSelectAll = true;
-						}
-						for (int i = 0; i < mListView.getCount(); i++) {
-							mListView.setItemChecked(i,
-									!mIsSelectAll);
-						}
-						return true;
-					
-		            default:
-		                return false;
-			}
-			}
-			
-			
-			private void deleteSelectedItems() {
-				Toast.makeText(MainActivity.this,"cool!!!", Toast.LENGTH_LONG).show();
-			}
-
-			@Override
-			public void onItemCheckedStateChanged(ActionMode mode, int position,
-					long id, boolean checked) {
-				 // Here you can do something when items are selected/de-selected,
-		        // such as update the title in the CAB
-				setActionModeTitle(mode);
-				
-			}
-			private void setActionModeTitle(ActionMode mode) {
-				final int checkedCount = getListView().getCheckedItemCount();
-				
-				switch (checkedCount) {
-				case 0:
-					mode.setSubtitle(null);
-					break;
-				case 1: 
-                    mode.setSubtitle("1 item selected");  
-                    break;  
-                default:  
-                    mode.setSubtitle(checkedCount + " items selected");  
-                    break;
-				}
-			}
-		});*/
 
 		refreshNotesListView();
+		
 	
 		/*
-		 * 
+		 * 滑动侧边栏
 		 */
 		
 		title = (String) getTitle();
@@ -267,6 +169,65 @@ public class MainActivity extends ListActivity {
 		getActionBar().setHomeButtonEnabled(true);
 		getActionBar().setDisplayShowHomeEnabled(false);//
 		
+		
+		/*
+		 * 滑动删除
+		 */
+		SwipeMenuCreator creator = new SwipeMenuCreator() {
+			
+			@Override
+			public void create(SwipeMenu menu) {
+				
+				 // create "open" item
+		        SwipeMenuItem favorItem = new SwipeMenuItem(
+		                getApplicationContext());
+		        // set item background
+		        favorItem.setBackground(new ColorDrawable(Color.rgb(0xE5, 0xE0,
+						0x3F)));
+		        // set item width
+		        favorItem.setWidth(dp2px(100));
+		        favorItem.setIcon(R.drawable.actionbar_favor_icon);
+		        // add to menu
+		        menu.addMenuItem(favorItem);
+		        
+		        
+			    // create "delete" item
+		        SwipeMenuItem deleteItem = new SwipeMenuItem(
+		                getApplicationContext());
+		        // set item background
+		        deleteItem.setBackground(new ColorDrawable(Color.rgb(0xF9,
+		                0x3F, 0x25)));
+		        // set item width
+		        deleteItem.setWidth(dp2px(100));
+		        // set a icon
+		        deleteItem.setIcon(R.drawable.actionbar_delete_icon);
+		        // add to menu
+		        menu.addMenuItem(deleteItem);
+		    }	
+				
+			
+		};
+		// set creator
+				mListView.setMenuCreator(creator);
+		
+		
+		mListView.setOnMenuItemClickListener(new OnMenuItemClickListener() {
+		    @Override
+		    public boolean onMenuItemClick(int position, SwipeMenu menu, int index) {
+		        switch (index) {
+		        case 0:
+		            Toast.makeText(MainActivity.this, "you did it!!", Toast.LENGTH_LONG).show();
+		            break;
+		        case 1:
+		            Toast.makeText(MainActivity.this, "you did it!!", Toast.LENGTH_LONG).show();
+		            break;
+		        }
+		        // false : close the menu; true : not close the menu
+		        return false;
+		    }
+		});
+		
+		
 	}
 
 	/*
@@ -308,6 +269,8 @@ public class MainActivity extends ListActivity {
 
 		super.onPostCreate(savedInstanceState);
 	}
+	
+	//上下文菜单
 	@Override
 	public void onCreateContextMenu(ContextMenu menu, View v,
 			ContextMenuInfo menuInfo) {
@@ -387,6 +350,12 @@ public class MainActivity extends ListActivity {
 				null, null, null, null));
 
 	}
+	
+	private int dp2px(int dp) {
+		return (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, dp,
+				getResources().getDisplayMetrics());
+	}
+	
 
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
@@ -407,3 +376,95 @@ public class MainActivity extends ListActivity {
 	
 
 }
+
+/*
+ * 设置多选模式。 
+ 
+mListView = getListView();
+mListView.setChoiceMode(ListView.CHOICE_MODE_MULTIPLE_MODAL);
+mListView.setMultiChoiceModeListener(new MultiChoiceModeListener() {
+	
+	@Override
+	public boolean onPrepareActionMode(ActionMode mode, Menu menu) {
+		// Here you can perform updates to the CAB due to
+        // an invalidate() request
+        return false;
+	}
+	
+	@Override
+	public void onDestroyActionMode(ActionMode mode) {
+		   // Here you can make any necessary updates to the activity when
+        // the CAB is removed. By default, selected items are deselected/unchecked.
+		
+	}
+	
+	@Override
+	public boolean onCreateActionMode(ActionMode mode, Menu menu) {
+		  // Inflate the menu for the CAB
+        MenuInflater inflater = mode.getMenuInflater();
+        inflater.inflate(R.menu.context, menu);
+        
+        *//** 
+         * 设置ActionMode的标题。 
+         *//*  
+        mode.setTitle("Select Items");
+        setActionModeTitle(mode);
+        return true;
+	}
+	
+	
+	@Override
+	public boolean onActionItemClicked(ActionMode mode, MenuItem item) {
+		 // Respond to clicks on the actions in the CAB
+        switch (item.getItemId()) {
+            case R.id.menu_delete:
+                deleteSelectedItems();
+                mode.finish(); // Action picked, so close the CAB
+                return true;
+            case R.id.menu_cancel: // 全选
+				if (mIsSelectAll) {
+					item.setTitle("取消全选");
+					mIsSelectAll = false;
+				} else {
+					item.setTitle("全选");
+					mIsSelectAll = true;
+				}
+				for (int i = 0; i < mListView.getCount(); i++) {
+					mListView.setItemChecked(i,
+							!mIsSelectAll);
+				}
+				return true;
+			
+            default:
+                return false;
+	}
+	}
+	
+	
+	private void deleteSelectedItems() {
+		Toast.makeText(MainActivity.this,"cool!!!", Toast.LENGTH_LONG).show();
+	}
+	@Override
+	public void onItemCheckedStateChanged(ActionMode mode, int position,
+			long id, boolean checked) {
+		 // Here you can do something when items are selected/de-selected,
+        // such as update the title in the CAB
+		setActionModeTitle(mode);
+		
+	}
+	private void setActionModeTitle(ActionMode mode) {
+		final int checkedCount = getListView().getCheckedItemCount();
+		
+		switch (checkedCount) {
+		case 0:
+			mode.setSubtitle(null);
+			break;
+		case 1: 
+            mode.setSubtitle("1 item selected");  
+            break;  
+        default:  
+            mode.setSubtitle(checkedCount + " items selected");  
+            break;
+		}
+	}
+});*/

@@ -1,6 +1,8 @@
 package com.example.note2.arcmenu;
 
 
+import java.security.PublicKey;
+
 import android.content.Context;
 import android.content.res.TypedArray;
 import android.util.AttributeSet;
@@ -59,6 +61,7 @@ import com.example.note2.R;
 	/*
 	 * 给用户一个可以回调的set方法
 	 */
+	 
 	public void setOnMenuItemClickListener(
 			OnMenuItemClickListener mMenuItemClickListener)
 	{

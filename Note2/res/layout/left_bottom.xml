@@ -31,10 +31,10 @@
         android:id="@+id/sat_Record"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:src="@drawable/composer_music"
+        android:src="@drawable/composer_talk"
         android:tag="2" />
 
-    <ImageView
+  <!--   <ImageView
         android:id="@+id/sat_Save"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -46,13 +46,13 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:src="@drawable/composer_thought"
-        android:tag="4" />
+        android:tag="4" /> -->
 
     <ImageView
         android:id="@+id/sat_Video"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:src="@drawable/composer_with"
+        android:src="@drawable/composer_video"
         android:tag="5" />
 
 </com.example.note2.arcmenu.ArcMenu>

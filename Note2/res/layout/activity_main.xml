@@ -6,18 +6,17 @@
     <FrameLayout
         android:id="@+id/content_frame"
         android:layout_width="match_parent"
-        android:layout_height="match_parent" >
+        android:layout_height="match_parent"
+        android:background="@drawable/background_activated" >
 
-        <ListView
+        <com.baoyz.swipemenulistview.SwipeMenuListView
             android:id="@android:id/list"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:divider="#c3c3c3"
             android:background="#ffffff"
+            android:divider="#c3c3c3"
             android:dividerHeight="0.5dp"
-            android:listSelector="@drawable/item_selector"
-            android:paddingLeft="10dp" >
-        </ListView>
+            android:paddingLeft="10dp" />
     </FrameLayout>
 
     <ListView
