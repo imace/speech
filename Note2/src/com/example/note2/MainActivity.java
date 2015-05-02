@@ -91,8 +91,8 @@ public class MainActivity extends ListActivity {
 
 		adapter = new SimpleCursorAdapter(this, R.layout.notes_list_cell, null,
 				new String[] { NotesDB.COLUMN_NAME_NOTE_NAME,
-						NotesDB.COLUMN_NAME_NOTE_DATE }, new int[] {
-						R.id.tvName, R.id.tvDate });
+						NotesDB.COLUMN_NAME_NOTE_DATE,NotesDB.COLUMN_NAME_NOTE_CONTENT }, new int[] {
+						R.id.tvName, R.id.tvDate,R.id.tvContent });
 		setListAdapter(adapter);
 		//获取并给listview注册上下文菜单
 		mListView = getListView();

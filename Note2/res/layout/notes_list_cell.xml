@@ -35,5 +35,15 @@
         android:layout_marginTop="5dp"
         
         android:layout_below="@id/tvName" />
+    <TextView
+        android:id="@+id/tvContent"	
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingLeft="4dp"
+        android:paddingRight="4dp"
+        android:paddingTop="4dp"
+        android:textColor="@drawable/gray"
+        android:textSize="12dp"
+        android:layout_below="@id/tvDate"/>
 
 </RelativeLayout>
