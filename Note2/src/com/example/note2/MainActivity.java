@@ -3,6 +3,7 @@ package com.example.note2;
 import java.util.ArrayList;
 import java.util.List;
 
+import android.R.integer;
 import android.app.Activity;
 import android.app.Fragment;
 import android.app.FragmentManager;
@@ -60,14 +61,18 @@ public class MainActivity extends ListActivity {
 			 * 将fragment插入到frameLayout中
 			 */
 
-			Fragment contentFragment = new ContentFragment();
-			Bundle args = new Bundle();
-			//args.putString("text", ListItem.get(position));
-			args.putString("text", "aaaaaaaaaaaaaa");
-			contentFragment.setArguments(args);
-
+			switch (position) {
+			case 4:
+				Intent i = new Intent(MainActivity.this,AtySettings.class);
+				startActivity(i);
+				break;
+				
+			default:
+				break;
+			}
+			Fragment drawerFragment = new DrawerFragment();
 			FragmentManager fm = getFragmentManager();
-			fm.beginTransaction().replace(R.id.content_frame, contentFragment)
+			fm.beginTransaction().replace(R.id.content_frame, drawerFragment)
 					.commit();
 
 			mDrawerLayout.closeDrawer(mDrawList);
@@ -91,7 +96,7 @@ public class MainActivity extends ListActivity {
 		setListAdapter(adapter);
 		
 		
-		//获取并给listview注册上下文菜单
+		//获取并给listview注册上下文菜单(长按)
 		mListView = (SwipeMenuListView) getListView();
 		registerForContextMenu(mListView);
 
@@ -106,15 +111,13 @@ public class MainActivity extends ListActivity {
 		mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
 		mDrawList = (ListView) findViewById(R.id.left_drawer);
 		
+		
 		String[] mTitle = getResources().getStringArray(R.array.item_title);
 		int[] itemIconRes={
 				R.drawable.ic_drawer_home_normal,
-				R.drawable.ic_drawer_explore_normal,
-				R.drawable.ic_drawer_follow_normal,
 				R.drawable.ic_drawer_collect_normal,
-				R.drawable.ic_drawer_draft_normal,
-				R.drawable.ic_drawer_search_normal,
-				R.drawable.ic_drawer_question_normal,
+				R.drawable.ic_drawer_feedback_normal,
+				R.drawable.ic_drawer_count_normal,
 				R.drawable.ic_drawer_setting_normal
 				
 		};
@@ -127,17 +130,6 @@ public class MainActivity extends ListActivity {
 		DrawerListAdapter adapter = new DrawerListAdapter(this,ListItem);
 		mDrawList.setAdapter(adapter);
 		
-		
-
-		/*menulist = new ArrayList<String>();
-		menulist.add("Login");
-		menulist.add("Upload");
-		menulist.add("Dowload");
-		menulist.add("Share");
-		menulist.add("Feedback");
-		menuAdapter = new ArrayAdapter<>(this,
-				android.R.layout.simple_list_item_1, menulist);
-		mDrawList.setAdapter(menuAdapter);*/
 		mDrawList.setOnItemClickListener(btnMenuList_clickHandler);
 /*
  * 监听侧边栏是否打开，并设置标题,图标
@@ -231,7 +223,7 @@ public class MainActivity extends ListActivity {
 	}
 
 	/*
-	 * 根据侧边栏是否打开变换右上角的功能图标
+	 * 根据侧边栏是否打开变换右上角的功能图标??
 	 */
 	@Override
 	public boolean onPrepareOptionsMenu(Menu menu) {
@@ -270,7 +262,7 @@ public class MainActivity extends ListActivity {
 		super.onPostCreate(savedInstanceState);
 	}
 	
-	//上下文菜单
+/*	//上下文菜单
 	@Override
 	public void onCreateContextMenu(ContextMenu menu, View v,
 			ContextMenuInfo menuInfo) {
@@ -298,7 +290,7 @@ public class MainActivity extends ListActivity {
               break;  
       } 
 		return super.onContextItemSelected(item);
-	}
+	}*/
 	// 屏幕旋转时的处理
 	@Override
 	public void onConfigurationChanged(Configuration newConfig) {
