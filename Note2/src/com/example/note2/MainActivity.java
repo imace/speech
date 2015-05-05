@@ -3,7 +3,6 @@ package com.example.note2;
 import java.util.ArrayList;
 import java.util.List;
 
-import android.R.integer;
 import android.app.Activity;
 import android.app.Fragment;
 import android.app.FragmentManager;
@@ -18,14 +17,10 @@ import android.os.Bundle;
 import android.support.v4.app.ActionBarDrawerToggle;
 import android.support.v4.widget.DrawerLayout;
 import android.util.TypedValue;
-import android.view.ContextMenu;
-import android.view.ContextMenu.ContextMenuInfo;
 import android.view.Menu;
-import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
-import android.widget.AdapterView.AdapterContextMenuInfo;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ListView;
 import android.widget.SimpleCursorAdapter;
@@ -47,6 +42,7 @@ public class MainActivity extends ListActivity {
 	private List<DrawerListItem> ListItem = new ArrayList<DrawerListItem>();
 	
 	private SwipeMenuListView mListView;
+	private int itemId;
 	
 
 
@@ -75,7 +71,7 @@ public class MainActivity extends ListActivity {
 			fm.beginTransaction().replace(R.id.content_frame, drawerFragment)
 					.commit();
 
-			mDrawerLayout.closeDrawer(mDrawList);
+			//mDrawerLayout.closeDrawer(mDrawList);
 
 		}
 	};
@@ -88,6 +84,7 @@ public class MainActivity extends ListActivity {
 
 		db = new NotesDB(this);
 		dbRead = db.getReadableDatabase();
+		dbWrite = db.getReadableDatabase();
 
 		adapter = new SimpleCursorAdapter(this, R.layout.notes_list_cell, null,
 				new String[] { NotesDB.COLUMN_NAME_NOTE_NAME,
@@ -127,8 +124,8 @@ public class MainActivity extends ListActivity {
 			
 		}
 		
-		DrawerListAdapter adapter = new DrawerListAdapter(this,ListItem);
-		mDrawList.setAdapter(adapter);
+		DrawerListAdapter drawerListAdapter = new DrawerListAdapter(this,ListItem);
+		mDrawList.setAdapter(drawerListAdapter);
 		
 		mDrawList.setOnItemClickListener(btnMenuList_clickHandler);
 /*
@@ -206,9 +203,12 @@ public class MainActivity extends ListActivity {
 		mListView.setOnMenuItemClickListener(new OnMenuItemClickListener() {
 		    @Override
 		    public boolean onMenuItemClick(int position, SwipeMenu menu, int index) {
+		    	Cursor cursor = adapter.getCursor();
+		    	itemId = cursor.getInt(cursor.getColumnIndex(NotesDB.COLUMN_NAME_ID));
 		        switch (index) {
 		        case 0:
-		            Toast.makeText(MainActivity.this, "you did it!!", Toast.LENGTH_LONG).show();
+		        dbWrite.delete(NotesDB.TABLE_NAME_NOTES, NotesDB.COLUMN_NAME_ID +"=?", new String[]{itemId +""});
+		        refreshNotesListView();
 		            break;
 		        case 1:
 		            Toast.makeText(MainActivity.this, "you did it!!", Toast.LENGTH_LONG).show();
@@ -358,7 +358,7 @@ public class MainActivity extends ListActivity {
 
 	private SimpleCursorAdapter adapter = null;
 	private NotesDB db;
-	private SQLiteDatabase dbRead;
+	private SQLiteDatabase dbRead,dbWrite;
 
 	public static final int REQUEST_CODE_ADD_NOTE = 1;
 	public static final int REQUEST_CODE_EDIT_NOTE = 2;

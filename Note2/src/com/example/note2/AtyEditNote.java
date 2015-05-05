@@ -183,7 +183,7 @@ public class AtyEditNote extends ListActivity {
 					i.putExtra(MediaStore.EXTRA_OUTPUT, Uri.fromFile(f));// 媒体输出路径,存储位置
 					startActivityForResult(i, REQUEST_CODE_GET_PHOTO);
 					break;
-				case 4:
+				case 3:
 
 					i = new Intent(MediaStore.ACTION_VIDEO_CAPTURE);
 					f = new File(getMediaDir(), System.currentTimeMillis()
@@ -200,7 +200,7 @@ public class AtyEditNote extends ListActivity {
 
 					startActivityForResult(i, REQUEST_CODE_GET_VIDEO);
 					break;
-				case 3:
+				case 4:
 					saveMedia(saveNote());
 					setResult(RESULT_OK);
 					finish();
@@ -347,6 +347,7 @@ public class AtyEditNote extends ListActivity {
 		if (noteId > -1) {
 			dbWrite.update(NotesDB.TABLE_NAME_NOTES, cv, NotesDB.COLUMN_NAME_ID
 					+ "=?", new String[] { noteId + "" });
+			
 			return noteId;
 		} else {
 			return (int) dbWrite.insert(NotesDB.TABLE_NAME_NOTES, null, cv);
@@ -476,7 +477,10 @@ public class AtyEditNote extends ListActivity {
 	public boolean onOptionsItemSelected(MenuItem item) {
 		switch (item.getItemId()) {
 		case android.R.id.home:
+			saveMedia(saveNote());
+			setResult(RESULT_OK);
 			finish();
+		
 			return true;
 
 		default:
