@@ -1,0 +1,112 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:orientation="vertical"
+    android:background="@drawable/actionbar_background" >
+
+    
+    <RelativeLayout
+        android:id="@+id/relativeLayout1"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentTop="true"
+        android:layout_marginTop="200dp" >
+
+        <TableLayout
+            android:id="@+id/MorePageTableLayout_Favorite"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:paddingLeft="20dp"
+            android:paddingRight="20dp"
+            android:shrinkColumns="0"
+            android:stretchColumns="0" >
+
+            <TableRow
+                android:id="@+id/aty_login_tab1"
+                android:layout_width="match_parent"
+                android:layout_marginLeft="2.0dip"
+                android:layout_marginRight="2.0dip"
+                android:background="@android:color/white"
+                android:paddingBottom="16.0dip"
+                android:paddingTop="16.0dip" >
+
+                <EditText
+                    android:id="@+id/login_etname"
+                    android:layout_width="wrap_content"
+                    android:layout_height="fill_parent"
+                    android:background="@null"
+                    android:ems="10"
+                    android:gravity="center_vertical"
+                    android:hint="用户名或邮箱"
+                    android:includeFontPadding="false"
+                    android:inputType="textPersonName"
+                    android:paddingLeft="17.0dip"
+                    android:textColor="#ff333333"
+                    android:textSize="16.0sp" >
+                </EditText>
+            </TableRow>
+
+            <TableRow
+                android:id="@+id/aty_login_tab2"
+                android:layout_width="match_parent"
+                android:layout_marginLeft="2.0dip"
+                android:layout_marginRight="2.0dip"
+                android:layout_marginTop="20dp"
+                android:background="@android:color/white"
+                android:paddingBottom="16.0dip"
+                android:paddingTop="16.0dip" >
+
+                <EditText
+                    android:id="@+id/login_etpwd"
+                    android:layout_width="wrap_content"
+                    android:layout_height="fill_parent"
+                    android:background="@null"
+                    android:ems="10"
+                    android:gravity="center_vertical"
+                    android:hint="密码"
+                    android:includeFontPadding="true"
+                    android:inputType="textPassword"
+                    android:paddingLeft="17.0dip"
+                    android:textColor="#ff333333"
+                    android:textSize="16.0sp" >
+                </EditText>
+            </TableRow>
+        </TableLayout>
+    </RelativeLayout>
+
+    <TextView
+        android:id="@+id/btn_signin"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="30dp"
+        android:text="注册iNotes"
+        android:textColor="@android:color/white" />
+
+    <TextView
+        android:id="@+id/textView1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="57dp"
+        android:text="iNotes"
+        android:textAppearance="?android:attr/textAppearanceLarge"
+        android:textColor="@android:color/white"
+        android:textSize="38dp" />
+
+    <Button
+        android:id="@+id/aty_login_btnlogin"
+        android:layout_width="316dp"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/relativeLayout1"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="28dp"
+        android:background="#213a73"
+        android:text="登录"
+        android:textColor="@android:color/white" />
+
+</RelativeLayout>

@@ -22,6 +22,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
+import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.SimpleCursorAdapter;
 import android.widget.Toast;
@@ -62,6 +63,10 @@ public class MainActivity extends ListActivity {
 				Intent i = new Intent(MainActivity.this,AtySettings.class);
 				startActivity(i);
 				break;
+			case 3:
+				Intent loginIntent = new Intent(MainActivity.this,AtyLogin.class);
+				startActivity(loginIntent);
+				break;
 				
 			default:
 				break;
@@ -84,7 +89,7 @@ public class MainActivity extends ListActivity {
 
 		db = new NotesDB(this);
 		dbRead = db.getReadableDatabase();
-		dbWrite = db.getReadableDatabase();
+		dbWrite = db.getWritableDatabase();
 
 		adapter = new SimpleCursorAdapter(this, R.layout.notes_list_cell, null,
 				new String[] { NotesDB.COLUMN_NAME_NOTE_NAME,
@@ -221,7 +226,6 @@ public class MainActivity extends ListActivity {
 		
 		
 	}
-
 	/*
 	 * 根据侧边栏是否打开变换右上角的功能图标??
 	 */

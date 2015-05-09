@@ -36,6 +36,8 @@
         <activity android:name="AtyVideoViewer"></activity>
         <activity android:name="IatDemo"></activity>
         <activity android:name="AtySettings"></activity>
+        <activity android:name="AtyLogin"></activity>
+        <activity android:name="AtySignin"></activity>
     </application>
 
 </manifest>

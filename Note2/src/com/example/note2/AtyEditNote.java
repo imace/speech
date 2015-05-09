@@ -8,6 +8,7 @@ import java.util.Date;
 import java.util.List;
 
 import android.R.anim;
+import android.R.integer;
 import android.app.ActionBar;
 import android.app.ListActivity;
 import android.content.ContentValues;
@@ -15,10 +16,13 @@ import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
+import android.graphics.Bitmap;
+import android.media.ThumbnailUtils;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
 import android.provider.MediaStore;
+import android.provider.MediaStore.Video.Thumbnails;
 import android.view.ContextMenu;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -46,40 +50,6 @@ public class AtyEditNote extends ListActivity {
 	
 	private ListView mListView;
 
-	/*
-	 * private OnClickListener btnClickHandler = new OnClickListener() {
-	 * 
-	 * File f; Intent i;
-	 * 
-	 * 
-	 * @Override public void onClick(View v) { switch (v.getId()) { case
-	 * R.id.sat_camera:
-	 * 
-	 * i = new Intent(MediaStore.ACTION_IMAGE_CAPTURE); f = new
-	 * File(getMediaDir(), System.currentTimeMillis() + ".jpg"); if
-	 * (!f.exists()) { try { f.createNewFile(); } catch (IOException e) {
-	 * e.printStackTrace(); } } currentPath = f.getAbsolutePath();
-	 * i.putExtra(MediaStore.EXTRA_OUTPUT, Uri.fromFile(f));// 媒体输出路径,存储位置
-	 * startActivityForResult(i, REQUEST_CODE_GET_PHOTO); break; case
-	 * R.id.sat_Video:
-	 * 
-	 * i = new Intent(MediaStore.ACTION_VIDEO_CAPTURE); f = new
-	 * File(getMediaDir(), System.currentTimeMillis() + ".mp4"); if
-	 * (!f.exists()) { try { f.createNewFile(); } catch (IOException e) {
-	 * e.printStackTrace(); } } currentPath = f.getAbsolutePath();
-	 * i.putExtra(MediaStore.EXTRA_OUTPUT, Uri.fromFile(f));
-	 * 
-	 * startActivityForResult(i, REQUEST_CODE_GET_VIDEO); break; case
-	 * R.id.sat_Save: saveMedia(saveNote()); setResult(RESULT_OK); finish();
-	 * break; case R.id.sat_Cancel: setResult(RESULT_CANCELED); finish(); break;
-	 * case R.id.sat_Record:
-	 * 
-	 * Intent i = new Intent(AtyEditNote.this,IatDemo.class);
-	 * 
-	 * startActivityForResult(i, REQUEST_CODE_GET_SOUND);
-	 * 
-	 * default: break; } } };
-	 */
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -381,6 +351,7 @@ public class AtyEditNote extends ListActivity {
 	public static final String EXTRA_NOTE_CONTENT = "noteContent";
 
 	static class MediaAdapter extends BaseAdapter {
+		
 
 		public MediaAdapter(Context context) {
 			this.context = context;
@@ -420,9 +391,20 @@ public class AtyEditNote extends ListActivity {
 			TextView tvPath = (TextView) convertView.findViewById(R.id.tvPath);
 
 			ivIcon.setImageResource(data.iconId);
+//			ivIcon.setImageBitmap(getVideoThumbnail(urlvideo, 200, 200,
+//					MediaStore.Images.Thumbnails.MICRO_KIND));
 			tvPath.setText(data.path);
 			return convertView;
 		}
+		
+//		private Bitmap getVideoThumbnail(String uri, int width, int height,int kind){
+//			Bitmap bitmap = null;
+//			bitmap = ThumbnailUtils.createVideoThumbnail(uri, kind);
+//			bitmap = ThumbnailUtils.extractThumbnail(bitmap, width, height,ThumbnailUtils.OPTIONS_RECYCLE_INPUT);
+//		
+//			return bitmap;
+//		}
+		
 
 		private Context context;
 		private List<MediaListCellData> list = new ArrayList<AtyEditNote.MediaListCellData>();

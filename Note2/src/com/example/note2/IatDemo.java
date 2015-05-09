@@ -252,7 +252,7 @@ public class IatDemo extends Activity implements OnClickListener{
 			mIat.setParameter(SpeechConstant.ACCENT,lag);
 		}
 		// 设置语音前端点
-		mIat.setParameter(SpeechConstant.VAD_BOS, mSharedPreferences.getString("iat_vadbos_preference", "4000"));
+		mIat.setParameter(SpeechConstant.VAD_BOS, mSharedPreferences.getString("iat_vadbos_preference", "1000"));
 		// 设置语音后端点
 		mIat.setParameter(SpeechConstant.VAD_EOS, mSharedPreferences.getString("iat_vadeos_preference", "1000"));
 		// 设置标点符号
@@ -310,14 +310,14 @@ public class IatDemo extends Activity implements OnClickListener{
 
 
 	public void onBackPressed() { 
-        new AlertDialog.Builder(this).setTitle("确认退出吗？") 
+        new AlertDialog.Builder(this).setTitle("是否保存当前音频？") 
             .setIcon(android.R.drawable.ic_dialog_info) 
             .setPositiveButton("确定", new DialogInterface.OnClickListener() { 
          
                 @Override 
                 public void onClick(DialogInterface dialog, int which) { 
                 // 点击“确认”后的操作 
-                   Toast.makeText(IatDemo.this, ".", Toast.LENGTH_LONG).show();
+                   Toast.makeText(IatDemo.this, "音频保存成功", Toast.LENGTH_LONG).show();
                    pcm2wav();
                    //把地址推送到ActivityForResult
                    Intent intent = new Intent();
@@ -331,6 +331,7 @@ public class IatDemo extends Activity implements OnClickListener{
          
                 @Override 
                 public void onClick(DialogInterface dialog, int which) { 
+                	finish();
                 // 点击“返回”后的操作,这里不设置没有任何操作 
                 } 
             }).show(); 
