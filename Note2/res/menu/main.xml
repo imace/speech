@@ -8,7 +8,7 @@
         android:icon="@drawable/actionbar_search_icon"
         android:title="action_search"
         android:actionViewClass="android.widget.SearchView"
-        android:showAsAction="ifRoom"
+        android:showAsAction="collapseActionView|ifRoom"
        /> 
     <item android:id="@+id/action_add"
         android:icon="@drawable/actionbar_add"

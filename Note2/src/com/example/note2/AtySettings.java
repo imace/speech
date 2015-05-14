@@ -16,7 +16,7 @@ public class AtySettings extends Activity{
 		actionBar.hide();
 		super.onCreate(savedInstanceState);
 		
-		imageView = (ImageView) findViewById(R.id.ic_signin_back);
+		imageView = (ImageView) findViewById(R.id.ic_settings_back);
 		imageView.setOnClickListener(new OnClickListener() {
 			
 			@Override
